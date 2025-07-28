@@ -1,4 +1,4 @@
-import type { IWebhookFunctions, INodeType, INodeTypeDescription, IWebhookResponseData } from ;
+import type { IHookFunctions, IWebhookFunctions, INodeType, INodeTypeDescription, IWebhookResponseData } from 'n8n-workflow';
 export declare class MeetGeekTrigger implements INodeType {
     description: INodeTypeDescription;
     webhookMethods: {
