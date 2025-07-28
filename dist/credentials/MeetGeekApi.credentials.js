@@ -27,7 +27,6 @@ class MeetGeekApi {
         };
         this.test = {
             request: {
-                baseURL: 'https://api.meetgeek.ai',
                 url: '/v1/meetings',
                 method: 'GET',
             },

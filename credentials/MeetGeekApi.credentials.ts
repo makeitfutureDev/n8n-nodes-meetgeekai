@@ -32,7 +32,6 @@ export class MeetGeekApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: 'https://api.meetgeek.ai',
 			url: '/v1/meetings',
 			method: 'GET',
 		},
