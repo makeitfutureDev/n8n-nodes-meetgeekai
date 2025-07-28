@@ -571,6 +571,7 @@ export class MeetGeek implements INodeType {
 
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
 						const cursor = this.getNodeParameter('cursor', i) as string;
+						let limit = this.getNodeParameter('limit', i) as number;
 
 						if (returnAll) {
 							// Get all results by paginating
@@ -608,11 +609,13 @@ export class MeetGeek implements INodeType {
 								nextCursor = pageData.pagination?.next_cursor;
 							} while (nextCursor);
 
-							responseData = allHighlights;
+							responseData = { highlights: allHighlights };
 						} else {
 							// Single page request
-							const limit = this.getNodeParameter('limit', i) as number;
 							const qs: any = { limit };
+							if (cursor) {
+								qs.cursor = cursor;
+							}
 
 							const options = {
 								method: 'GET',
@@ -626,18 +629,11 @@ export class MeetGeek implements INodeType {
 
 							console.log('MeetGeek API Request - Get Many Highlights:', JSON.stringify(options, null, 2));
 
-							const pageData = await this.helpers.requestWithAuthentication.call(
+							responseData = await this.helpers.requestWithAuthentication.call(
 								this,
 								'meetGeekApi',
 								options,
 							);
-
-							// Return only the highlights array, respecting the limit
-							if (pageData.highlights && Array.isArray(pageData.highlights)) {
-								responseData = pageData.highlights.slice(0, limit);
-							} else {
-								responseData = [];
-							}
 						}
 					}
 
@@ -667,13 +663,11 @@ export class MeetGeek implements INodeType {
 				if (resource === 'team') {
 					if (operation === 'getMany') {
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-						const cursor = this.getNodeParameter('cursor', i) as string;
-						let limit = this.getNodeParameter('limit', i) as number;
 
 						if (returnAll) {
 							// Get all results by paginating
 							let allTeams: any[] = [];
-							let nextCursor = cursor || undefined;
+							let nextCursor: string | undefined = undefined;
 							
 							do {
 								const qs: any = {};
@@ -706,13 +700,11 @@ export class MeetGeek implements INodeType {
 								nextCursor = pageData.pagination?.next_cursor;
 							} while (nextCursor);
 
-							responseData = { teams: allTeams };
+							responseData = allTeams;
 						} else {
 							// Single page request
+							const limit = this.getNodeParameter('limit', i) as number;
 							const qs: any = { limit };
-							if (cursor) {
-								qs.cursor = cursor;
-							}
 
 							const options = {
 								method: 'GET',
@@ -726,11 +718,18 @@ export class MeetGeek implements INodeType {
 
 							console.log('MeetGeek API Request - Get Many Teams:', JSON.stringify(options, null, 2));
 
-							responseData = await this.helpers.requestWithAuthentication.call(
+							const pageData = await this.helpers.requestWithAuthentication.call(
 								this,
 								'meetGeekApi',
 								options,
 							);
+
+							// Return only the teams array, respecting the limit
+							if (pageData.teams && Array.isArray(pageData.teams)) {
+								responseData = pageData.teams.slice(0, limit);
+							} else {
+								responseData = [];
+							}
 						}
 					}
 
