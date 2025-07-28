@@ -449,7 +449,6 @@ class MeetGeek {
                     }
                     if (operation === 'getMany') {
                         const returnAll = this.getNodeParameter('returnAll', i);
-                        let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allMeetings = [];
@@ -475,10 +474,11 @@ class MeetGeek {
                                 }
                                 nextCursor = (_a = pageData.pagination) === null || _a === void 0 ? void 0 : _a.next_cursor;
                             } while (nextCursor);
-                            responseData = { meetings: allMeetings };
+                            responseData = allMeetings;
                         }
                         else {
                             // Single page request
+                            const limit = this.getNodeParameter('limit', i);
                             const qs = { limit };
                             const options = {
                                 method: 'GET',
@@ -490,7 +490,14 @@ class MeetGeek {
                                 useQuerystring: true,
                             };
                             console.log('MeetGeek API Request - Get Many Meetings:', JSON.stringify(options, null, 2));
-                            responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
+                            const pageData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
+                            // Return only the meetings array, respecting the limit
+                            if (pageData.meetings && Array.isArray(pageData.meetings)) {
+                                responseData = pageData.meetings.slice(0, limit);
+                            }
+                            else {
+                                responseData = [];
+                            }
                         }
                     }
                 }
