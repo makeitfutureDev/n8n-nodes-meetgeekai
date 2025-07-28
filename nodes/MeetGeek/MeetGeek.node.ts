@@ -464,12 +464,13 @@ export class MeetGeek implements INodeType {
 
 					if (operation === 'getMany') {
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
+						const cursor = this.getNodeParameter('cursor', i) as string;
 						let limit = this.getNodeParameter('limit', i) as number;
 
 						if (returnAll) {
 							// Get all results by paginating
 							let allMeetings: any[] = [];
-							let nextCursor: string | undefined = undefined;
+							let nextCursor = cursor || undefined;
 							
 							do {
 								const qs: any = {};
@@ -506,6 +507,9 @@ export class MeetGeek implements INodeType {
 						} else {
 							// Single page request
 							const qs: any = { limit };
+							if (cursor) {
+								qs.cursor = cursor;
+							}
 
 							const options = {
 								method: 'GET',
@@ -758,13 +762,12 @@ export class MeetGeek implements INodeType {
 						const meetingId = this.getNodeParameter('meetingId', i) as string;
 
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-						const cursor = this.getNodeParameter('cursor', i) as string;
 						let limit = this.getNodeParameter('limit', i) as number;
 
 						if (returnAll) {
 							// Get all results by paginating
 							let allTranscripts: any[] = [];
-							let nextCursor = cursor || undefined;
+							let nextCursor: string | undefined = undefined;
 							
 							do {
 								const qs: any = {};
@@ -801,9 +804,6 @@ export class MeetGeek implements INodeType {
 						} else {
 							// Single page request
 							const qs: any = { limit };
-							if (cursor) {
-								qs.cursor = cursor;
-							}
 
 							const options = {
 								method: 'GET',
