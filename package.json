@@ -33,11 +33,11 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/MeetGeekApi.credentials.js"
+      "dist/credentials/MeetGeekApi.credentials.ts"
     ],
     "nodes": [
-      "dist/nodes/MeetGeek/MeetGeek.node.js",
-      "dist/nodes/MeetGeek/MeetGeekTrigger.node.js"
+      "dist/nodes/MeetGeek/MeetGeek.node.ts",
+      "dist/nodes/MeetGeek/MeetGeekTrigger.node.ts"
     ]
   },
   "devDependencies": {
