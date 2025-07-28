@@ -209,19 +209,6 @@ export class MeetGeek implements INodeType {
 			},
 			// Get Meetings Fields
 			{
-				displayName: 'Limit',
-				name: 'limit',
-				type: 'number',
-				displayOptions: {
-					show: {
-						resource: ['meeting'],
-						operation: ['getMeetings'],
-					},
-				},
-				default: 10,
-				description: 'Maximum number of meetings to return',
-			},
-			{
 				displayName: 'Cursor',
 				name: 'cursor',
 				type: 'string',
