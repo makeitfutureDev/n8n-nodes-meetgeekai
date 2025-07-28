@@ -6,7 +6,6 @@ import type {
 	NodeConnectionType,
 	IWebhookResponseData,
 	IRequestOptions,
-} from 'n8n-workflow';
 
 export class MeetGeekTrigger implements INodeType {
 	description: INodeTypeDescription = {
