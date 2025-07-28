@@ -663,11 +663,13 @@ export class MeetGeek implements INodeType {
 				if (resource === 'team') {
 					if (operation === 'getMany') {
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
+						const cursor = this.getNodeParameter('cursor', i) as string;
+						let limit = this.getNodeParameter('limit', i) as number;
 
 						if (returnAll) {
 							// Get all results by paginating
 							let allTeams: any[] = [];
-							let nextCursor: string | undefined = undefined;
+							let nextCursor = cursor || undefined;
 							
 							do {
 								const qs: any = {};
@@ -700,11 +702,13 @@ export class MeetGeek implements INodeType {
 								nextCursor = pageData.pagination?.next_cursor;
 							} while (nextCursor);
 
-							responseData = allTeams;
+							responseData = { teams: allTeams };
 						} else {
 							// Single page request
-							const limit = this.getNodeParameter('limit', i) as number;
 							const qs: any = { limit };
+							if (cursor) {
+								qs.cursor = cursor;
+							}
 
 							const options = {
 								method: 'GET',
@@ -718,18 +722,11 @@ export class MeetGeek implements INodeType {
 
 							console.log('MeetGeek API Request - Get Many Teams:', JSON.stringify(options, null, 2));
 
-							const pageData = await this.helpers.requestWithAuthentication.call(
+							responseData = await this.helpers.requestWithAuthentication.call(
 								this,
 								'meetGeekApi',
 								options,
 							);
-
-							// Return only the teams array, respecting the limit
-							if (pageData.teams && Array.isArray(pageData.teams)) {
-								responseData = pageData.teams.slice(0, limit);
-							} else {
-								responseData = [];
-							}
 						}
 					}
 
@@ -761,7 +758,6 @@ export class MeetGeek implements INodeType {
 						const meetingId = this.getNodeParameter('meetingId', i) as string;
 
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-						let limit = this.getNodeParameter('limit', i) as number;
 
 						if (returnAll) {
 							// Get all results by paginating
@@ -799,9 +795,10 @@ export class MeetGeek implements INodeType {
 								nextCursor = pageData.pagination?.next_cursor;
 							} while (nextCursor);
 
-							responseData = { transcripts: allTranscripts };
+							responseData = allTranscripts;
 						} else {
 							// Single page request
+							const limit = this.getNodeParameter('limit', i) as number;
 							const qs: any = { limit };
 
 							const options = {
@@ -816,11 +813,18 @@ export class MeetGeek implements INodeType {
 
 							console.log('MeetGeek API Request - Get Many Transcripts:', JSON.stringify(options, null, 2));
 
-							responseData = await this.helpers.requestWithAuthentication.call(
+							const pageData = await this.helpers.requestWithAuthentication.call(
 								this,
 								'meetGeekApi',
 								options,
 							);
+
+							// Return only the transcripts array, respecting the limit
+							if (pageData.transcripts && Array.isArray(pageData.transcripts)) {
+								responseData = pageData.transcripts.slice(0, limit);
+							} else {
+								responseData = [];
+							}
 						}
 					}
 
