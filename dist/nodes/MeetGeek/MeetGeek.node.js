@@ -196,7 +196,7 @@ class MeetGeek {
                             body: {},
                             json: true,
                             useQuerystring: true,
-                        }, satisfies, IRequestOptions;
+                        };
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                     }
                 }
@@ -221,7 +221,7 @@ class MeetGeek {
                             body,
                             json: true,
                             useQuerystring: true,
-                        }, satisfies, IRequestOptions;
+                        };
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                     }
                 }
@@ -235,7 +235,7 @@ class MeetGeek {
                             body: {},
                             json: true,
                             useQuerystring: true,
-                        }, satisfies, IRequestOptions;
+                        };
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                     }
                 }

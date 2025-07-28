@@ -95,7 +95,7 @@ class MeetGeekTrigger {
                         body,
                         json: true,
                         useQuerystring: true,
-                    }, satisfies, IRequestOptions;
+                    };
                     try {
                         const responseData = await this.helpers.request(options);
                         if (responseData.id === undefined) {
@@ -126,7 +126,7 @@ class MeetGeekTrigger {
                             body,
                             json: true,
                             useQuerystring: true,
-                        }, satisfies, IRequestOptions;
+                        };
                         try {
                             await this.helpers.request(options);
                         }

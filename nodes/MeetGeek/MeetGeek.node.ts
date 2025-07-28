@@ -205,7 +205,7 @@ export class MeetGeek implements INodeType {
 							body: {},
 							json: true,
 							useQuerystring: true,
-						} satisfies IRequestOptions;
+						} as IRequestOptions;
 
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,
@@ -241,7 +241,7 @@ export class MeetGeek implements INodeType {
 							body,
 							json: true,
 							useQuerystring: true,
-						} satisfies IRequestOptions;
+						} as IRequestOptions;
 
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,
@@ -263,7 +263,7 @@ export class MeetGeek implements INodeType {
 							body: {},
 							json: true,
 							useQuerystring: true,
-						} satisfies IRequestOptions;
+						} as IRequestOptions;
 
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,

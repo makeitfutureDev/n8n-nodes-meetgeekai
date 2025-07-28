@@ -107,7 +107,7 @@ export class MeetGeekTrigger implements INodeType {
 					body,
 					json: true,
 					useQuerystring: true,
-				} satisfies IRequestOptions;
+				} as IRequestOptions;
 
 				try {
 					const responseData = await this.helpers.request(options);
@@ -143,7 +143,7 @@ export class MeetGeekTrigger implements INodeType {
 						body,
 						json: true,
 						useQuerystring: true,
-					} satisfies IRequestOptions;
+					} as IRequestOptions;
 
 					try {
 						await this.helpers.request(options);
