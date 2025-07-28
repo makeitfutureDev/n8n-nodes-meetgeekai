@@ -366,6 +366,7 @@ export class MeetGeek implements INodeType {
 						const options = {
 							method: 'GET',
 							qs: {},
+							baseURL: 'https://api.meetgeek.ai',
 							uri: `/v1/meetings/${meetingId}`,
 							body: {},
 							json: true,
@@ -385,6 +386,7 @@ export class MeetGeek implements INodeType {
 						const options = {
 							method: 'GET',
 							qs: {},
+							baseURL: 'https://api.meetgeek.ai',
 							uri: `/v1/meetings/${meetingId}`,
 							body: {},
 							json: true,
@@ -408,6 +410,7 @@ export class MeetGeek implements INodeType {
 								limit,
 								offset,
 							},
+							baseURL: 'https://api.meetgeek.ai',
 							uri: `/v1/meetings`,
 							body: {},
 							json: true,
@@ -444,6 +447,7 @@ export class MeetGeek implements INodeType {
 						const options = {
 							method: 'POST',
 							qs: {},
+							baseURL: 'https://api.meetgeek.ai',
 							uri: `/v1/upload`,
 							body,
 							json: true,
@@ -466,6 +470,7 @@ export class MeetGeek implements INodeType {
 						const options = {
 							method: 'GET',
 							qs: {},
+							baseURL: 'https://api.meetgeek.ai',
 							uri: `/v1/meetings/${meetingId}/highlights`,
 							body: {},
 							json: true,
@@ -489,6 +494,7 @@ export class MeetGeek implements INodeType {
 							qs: {
 								limit,
 							},
+							baseURL: 'https://api.meetgeek.ai',
 							uri: `/v1/teams`,
 							body: {},
 							json: true,
@@ -511,6 +517,7 @@ export class MeetGeek implements INodeType {
 							qs: {
 								limit,
 							},
+							baseURL: 'https://api.meetgeek.ai',
 							uri: `/v1/teams/${teamId}/meetings`,
 							body: {},
 							json: true,
@@ -532,6 +539,7 @@ export class MeetGeek implements INodeType {
 						const options = {
 							method: 'GET',
 							qs: {},
+							baseURL: 'https://api.meetgeek.ai',
 							uri: `/v1/meetings/${meetingId}/transcripts`,
 							body: {},
 							json: true,
