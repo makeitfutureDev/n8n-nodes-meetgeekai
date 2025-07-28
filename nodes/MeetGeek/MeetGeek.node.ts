@@ -212,7 +212,6 @@ export class MeetGeek implements INodeType {
 							'meetGeekApi',
 							options,
 						);
-						returnData.push({ json: responseData });
 					}
 				}
 
@@ -249,7 +248,6 @@ export class MeetGeek implements INodeType {
 							'meetGeekApi',
 							options,
 						);
-						returnData.push({ json: responseData });
 					}
 				}
 
@@ -272,7 +270,6 @@ export class MeetGeek implements INodeType {
 							'meetGeekApi',
 							options,
 						);
-						returnData.push({ json: responseData });
 					}
 				}
 			} catch (error) {
