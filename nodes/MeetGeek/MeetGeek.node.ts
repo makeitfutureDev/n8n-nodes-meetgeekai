@@ -586,12 +586,7 @@ export class MeetGeek implements INodeType {
 				{ itemData: { item: i } },
 			);
 			returnData.push(...executionData);
-		}
-						console.log('MeetGeek API Request - Get Meetings:', JSON.stringify(options, null, 2));
-
-
-						console.log('MeetGeek API Request - Upload Recording:', JSON.stringify(options, null, 2));
-
+	}
 		return [returnData];
 	}
 }
