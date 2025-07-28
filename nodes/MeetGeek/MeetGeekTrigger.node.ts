@@ -101,8 +101,8 @@ export class MeetGeekTrigger implements INodeType {
 				const name = this.getNodeParameter('name') as string;
 
 				const baseUrl = credentials.token.toString().startsWith('us-')
-					? 'https://app.meetgeek.ai'
-					: 'https://app2.meetgeek.ai';
+					? 'https://api-us.meetgeek.ai'
+					: 'https://api-eu.meetgeek.ai';
 
 				const body = {
 					hookUrl: webhookUrl,
@@ -139,8 +139,8 @@ export class MeetGeekTrigger implements INodeType {
 
 				if (webhookData.webhookId !== undefined) {
 					const baseUrl = credentials.token.toString().startsWith('us-')
-						? 'https://app.meetgeek.ai'
-						: 'https://app2.meetgeek.ai';
+						? 'https://api-us.meetgeek.ai'
+						: 'https://api-eu.meetgeek.ai';
 
 					const body = {
 						hookUrl_id: webhookData.webhookId,

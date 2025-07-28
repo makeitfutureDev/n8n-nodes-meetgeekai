@@ -27,7 +27,7 @@ class MeetGeekApi {
         };
         this.test = {
             request: {
-                baseURL: '={{$credentials.token.startsWith("us-") ? "https://app.meetgeek.ai" : "https://app2.meetgeek.ai"}}',
+                baseURL: '={{$credentials.token.startsWith("us-") ? "https://api-us.meetgeek.ai" : "https://api-eu.meetgeek.ai"}}',
                 url: '/v1/meetings',
                 method: 'GET',
             },

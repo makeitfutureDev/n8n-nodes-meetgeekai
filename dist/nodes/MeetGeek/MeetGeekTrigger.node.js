@@ -91,8 +91,8 @@ class MeetGeekTrigger {
                     const eventType = this.getNodeParameter('eventType');
                     const name = this.getNodeParameter('name');
                     const baseUrl = credentials.token.toString().startsWith('us-')
-                        ? 'https://app.meetgeek.ai'
-                        : 'https://app2.meetgeek.ai';
+                        ? 'https://api-us.meetgeek.ai'
+                        : 'https://api-eu.meetgeek.ai';
                     const body = {
                         hookUrl: webhookUrl,
                         eventType: eventType,
@@ -124,8 +124,8 @@ class MeetGeekTrigger {
                     const credentials = await this.getCredentials('meetGeekApi');
                     if (webhookData.webhookId !== undefined) {
                         const baseUrl = credentials.token.toString().startsWith('us-')
-                            ? 'https://app.meetgeek.ai'
-                            : 'https://app2.meetgeek.ai';
+                            ? 'https://api-us.meetgeek.ai'
+                            : 'https://api-eu.meetgeek.ai';
                         const body = {
                             hookUrl_id: webhookData.webhookId,
                         };

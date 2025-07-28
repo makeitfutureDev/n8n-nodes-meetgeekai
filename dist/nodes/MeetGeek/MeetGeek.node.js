@@ -350,8 +350,8 @@ class MeetGeek {
         const operation = this.getNodeParameter('operation', 0);
         const credentials = await this.getCredentials('meetGeekApi');
         const baseURL = credentials.token.toString().startsWith('us-')
-            ? 'https://app.meetgeek.ai'
-            : 'https://app2.meetgeek.ai';
+            ? 'https://api-us.meetgeek.ai'
+            : 'https://api-eu.meetgeek.ai';
         let responseData;
         for (let i = 0; i < items.length; i++) {
             try {
