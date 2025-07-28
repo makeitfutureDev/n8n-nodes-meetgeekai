@@ -349,7 +349,7 @@ class MeetGeek {
         const resource = this.getNodeParameter('resource', 0);
         const operation = this.getNodeParameter('operation', 0);
         const credentials = await this.getCredentials('meetGeekApi');
-        const baseUrl = credentials.token.toString().startsWith('us-')
+        const baseURL = credentials.token.toString().startsWith('us-')
             ? 'https://app.meetgeek.ai'
             : 'https://app2.meetgeek.ai';
         let responseData;
@@ -361,7 +361,7 @@ class MeetGeek {
                         const options = {
                             method: 'GET',
                             qs: {},
-                            baseURL: 'https://api.meetgeek.ai',
+                            baseURL: baseURL,
                             uri: `/v1/meetings/${meetingId}`,
                             body: {},
                             json: true,
@@ -374,7 +374,7 @@ class MeetGeek {
                         const options = {
                             method: 'GET',
                             qs: {},
-                            baseURL: 'https://api.meetgeek.ai',
+                            baseURL: baseURL,
                             uri: `/v1/meetings/${meetingId}`,
                             body: {},
                             json: true,
@@ -391,7 +391,7 @@ class MeetGeek {
                                 limit,
                                 offset,
                             },
-                            baseURL: 'https://api.meetgeek.ai',
+                            baseURL: baseURL,
                             uri: `/v1/meetings`,
                             body: {},
                             json: true,
@@ -417,7 +417,7 @@ class MeetGeek {
                         const options = {
                             method: 'POST',
                             qs: {},
-                            baseURL: 'https://api.meetgeek.ai',
+                            baseURL: baseURL,
                             uri: `/v1/upload`,
                             body,
                             json: true,
@@ -432,7 +432,7 @@ class MeetGeek {
                         const options = {
                             method: 'GET',
                             qs: {},
-                            baseURL: 'https://api.meetgeek.ai',
+                            baseURL: baseURL,
                             uri: `/v1/meetings/${meetingId}/highlights`,
                             body: {},
                             json: true,
@@ -449,7 +449,7 @@ class MeetGeek {
                             qs: {
                                 limit,
                             },
-                            baseURL: 'https://api.meetgeek.ai',
+                            baseURL: baseURL,
                             uri: `/v1/teams`,
                             body: {},
                             json: true,
@@ -465,7 +465,7 @@ class MeetGeek {
                             qs: {
                                 limit,
                             },
-                            baseURL: 'https://api.meetgeek.ai',
+                            baseURL: baseURL,
                             uri: `/v1/teams/${teamId}/meetings`,
                             body: {},
                             json: true,
@@ -480,7 +480,7 @@ class MeetGeek {
                         const options = {
                             method: 'GET',
                             qs: {},
-                            baseURL: baseUrl,
+                            baseURL: baseURL,
                             uri: `/v1/meetings/${meetingId}/transcripts`,
                             body: {},
                             json: true,
