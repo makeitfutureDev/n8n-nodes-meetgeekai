@@ -370,7 +370,7 @@ export class MeetGeek implements INodeType {
 						const options = {
 							method: 'GET',
 							qs: {},
-							baseURL: baseUrl,
+							baseURL: 'https://api.meetgeek.ai',
 							uri: `/v1/meetings/${meetingId}`,
 							body: {},
 							json: true,
@@ -543,7 +543,7 @@ export class MeetGeek implements INodeType {
 						const options = {
 							method: 'GET',
 							qs: {},
-							baseURL: 'https://api.meetgeek.ai',
+							baseURL: baseUrl,
 							uri: `/v1/meetings/${meetingId}/transcripts`,
 							body: {},
 							json: true,
