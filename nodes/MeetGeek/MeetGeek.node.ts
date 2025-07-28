@@ -200,19 +200,6 @@ export class MeetGeek implements INodeType {
 			},
 			// Meeting Get Many Fields
 			{
-				displayName: 'Cursor',
-				name: 'cursor',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['meeting'],
-						operation: ['getMany'],
-					},
-				},
-				default: '',
-				description: 'Cursor for pagination. Leave empty for first page.',
-			},
-			{
 				displayName: 'Return All',
 				name: 'returnAll',
 				type: 'boolean',
@@ -296,19 +283,6 @@ export class MeetGeek implements INodeType {
 				description: 'The ID of the meeting to get highlights for',
 			},
 			{
-				displayName: 'Cursor',
-				name: 'cursor',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['highlight'],
-						operation: ['getMany'],
-					},
-				},
-				default: '',
-				description: 'Cursor for pagination. Leave empty for first page.',
-			},
-			{
 				displayName: 'Return All',
 				name: 'returnAll',
 				type: 'boolean',
@@ -351,19 +325,6 @@ export class MeetGeek implements INodeType {
 				description: 'The ID of the highlight to retrieve',
 			},
 			// Team Get Many Fields
-			{
-				displayName: 'Cursor',
-				name: 'cursor',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['team'],
-						operation: ['getMany'],
-					},
-				},
-				default: '',
-				description: 'Cursor for pagination. Leave empty for first page.',
-			},
 			{
 				displayName: 'Return All',
 				name: 'returnAll',
@@ -420,19 +381,6 @@ export class MeetGeek implements INodeType {
 				default: '',
 				required: true,
 				description: 'The ID of the meeting to get transcripts for',
-			},
-			{
-				displayName: 'Cursor',
-				name: 'cursor',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['transcript'],
-						operation: ['getMany'],
-					},
-				},
-				default: '',
-				description: 'Cursor for pagination. Leave empty for first page.',
 			},
 			{
 				displayName: 'Return All',
