@@ -3,6 +3,7 @@ import type {
 	IWebhookFunctions,
 	INodeType,
 	INodeTypeDescription,
+	NodeConnectionType,
 	IWebhookResponseData,
 	IRequestOptions,
 } from 'n8n-workflow';
@@ -19,7 +20,7 @@ export class MeetGeekTrigger implements INodeType {
 			name: 'MeetGeek Trigger',
 		},
 		inputs: [],
-		outputs: ['main'],
+		outputs: [NodeConnectionType.Main],
 		credentials: [
 			{
 				name: 'meetGeekApi',

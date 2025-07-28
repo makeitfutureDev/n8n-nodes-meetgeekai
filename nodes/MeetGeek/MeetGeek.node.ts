@@ -5,6 +5,7 @@ import {
 	INodeTypeDescription,
 	ILoadOptionsFunctions,
 	INodePropertyOptions,
+	NodeConnectionType,
 	NodeOperationError,
 	IWebhookFunctions,
 	IWebhookResponseData,
@@ -24,8 +25,8 @@ export class MeetGeek implements INodeType {
 		defaults: {
 			name: 'MeetGeek',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: [NodeConnectionType.Main],
+		outputs: [NodeConnectionType.Main],
 		credentials: [
 			{
 				name: 'meetGeekApi',

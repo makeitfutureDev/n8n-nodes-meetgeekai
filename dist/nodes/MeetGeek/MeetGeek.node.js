@@ -14,8 +14,8 @@ class MeetGeek {
             defaults: {
                 name: 'MeetGeek',
             },
-            inputs: ['main'],
-            outputs: ['main'],
+            inputs: ["main" /* NodeConnectionType.Main */],
+            outputs: ["main" /* NodeConnectionType.Main */],
             credentials: [
                 {
                     name: 'meetGeekApi',

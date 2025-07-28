@@ -14,7 +14,7 @@ class MeetGeekTrigger {
                 name: 'MeetGeek Trigger',
             },
             inputs: [],
-            outputs: ['main'],
+            outputs: ["main" /* NodeConnectionType.Main */],
             credentials: [
                 {
                     name: 'meetGeekApi',
