@@ -47,6 +47,16 @@ class MeetGeekTrigger {
                             value: 'MEETING_CREATED',
                             description: 'Triggers when a meeting is created',
                         },
+                        {
+                            name: 'Share Highlight',
+                            value: 'HIGHLIGHT_SHARED',
+                            description: 'Triggers when a highlight is shared',
+                        },
+                        {
+                            name: 'Share Meeting',
+                            value: 'MEETING_SHARED',
+                            description: 'Triggers when a meeting is shared',
+                        },
                     ],
                     default: 'HIGHLIGHT_CREATED',
                 },

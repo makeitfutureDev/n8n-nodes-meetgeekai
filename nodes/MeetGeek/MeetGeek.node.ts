@@ -47,6 +47,14 @@ export class MeetGeek implements INodeType {
 						name: 'Highlight',
 						value: 'highlight',
 					},
+					{
+						name: 'Team',
+						value: 'team',
+					},
+					{
+						name: 'Transcript',
+						value: 'transcript',
+					},
 				],
 				default: 'meeting',
 			},
@@ -67,8 +75,20 @@ export class MeetGeek implements INodeType {
 						description: 'Get meeting details by ID',
 						action: 'Get meeting details',
 					},
+					{
+						name: 'Get Meeting',
+						value: 'getMeeting',
+						description: 'Search for a specific meeting',
+						action: 'Get meeting',
+					},
+					{
+						name: 'Get Meetings',
+						value: 'getMeetings',
+						description: 'Get list of meetings',
+						action: 'Get meetings',
+					},
 				],
-				default: 'getDetails',
+				default: 'getMeeting',
 			},
 			{
 				displayName: 'Operation',
@@ -110,6 +130,52 @@ export class MeetGeek implements INodeType {
 				],
 				default: 'get',
 			},
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['team'],
+					},
+				},
+				options: [
+					{
+						name: 'Get Teams',
+						value: 'getTeams',
+						description: 'Get list of teams',
+						action: 'Get teams',
+					},
+					{
+						name: 'Get Team Meetings',
+						value: 'getTeamMeetings',
+						description: 'Get meetings for a specific team',
+						action: 'Get team meetings',
+					},
+				],
+				default: 'getTeams',
+			},
+			{
+				displayName: 'Operation',
+				name: 'operation',
+				type: 'options',
+				noDataExpression: true,
+				displayOptions: {
+					show: {
+						resource: ['transcript'],
+					},
+				},
+				options: [
+					{
+						name: 'Get Transcripts',
+						value: 'getTranscripts',
+						description: 'Get transcripts for a meeting',
+						action: 'Get transcripts',
+					},
+				],
+				default: 'getTranscripts',
+			},
 			// Meeting Details Fields
 			{
 				displayName: 'Meeting ID',
@@ -124,6 +190,48 @@ export class MeetGeek implements INodeType {
 				default: '',
 				required: true,
 				description: 'The ID of the meeting to retrieve details for',
+			},
+			// Get Meeting Fields
+			{
+				displayName: 'Meeting ID',
+				name: 'meetingId',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['meeting'],
+						operation: ['getMeeting'],
+					},
+				},
+				default: '',
+				required: true,
+				description: 'The ID of the meeting to search for',
+			},
+			// Get Meetings Fields
+			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				displayOptions: {
+					show: {
+						resource: ['meeting'],
+						operation: ['getMeetings'],
+					},
+				},
+				default: 10,
+				description: 'Maximum number of meetings to return',
+			},
+			{
+				displayName: 'Offset',
+				name: 'offset',
+				type: 'number',
+				displayOptions: {
+					show: {
+						resource: ['meeting'],
+						operation: ['getMeetings'],
+					},
+				},
+				default: 0,
+				description: 'Number of meetings to skip',
 			},
 			// Upload Recording Fields
 			{
@@ -181,6 +289,63 @@ export class MeetGeek implements INodeType {
 				required: true,
 				description: 'The ID of the meeting to retrieve highlights for',
 			},
+			// Get Teams Fields
+			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				displayOptions: {
+					show: {
+						resource: ['team'],
+						operation: ['getTeams'],
+					},
+				},
+				default: 10,
+				description: 'Maximum number of teams to return',
+			},
+			// Get Team Meetings Fields
+			{
+				displayName: 'Team ID',
+				name: 'teamId',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['team'],
+						operation: ['getTeamMeetings'],
+					},
+				},
+				default: '',
+				required: true,
+				description: 'The ID of the team to get meetings for',
+			},
+			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				displayOptions: {
+					show: {
+						resource: ['team'],
+						operation: ['getTeamMeetings'],
+					},
+				},
+				default: 10,
+				description: 'Maximum number of meetings to return',
+			},
+			// Get Transcripts Fields
+			{
+				displayName: 'Meeting ID',
+				name: 'meetingId',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['transcript'],
+						operation: ['getTranscripts'],
+					},
+				},
+				default: '',
+				required: true,
+				description: 'The ID of the meeting to get transcripts for',
+			},
 		],
 	};
 
@@ -202,6 +367,48 @@ export class MeetGeek implements INodeType {
 							method: 'GET',
 							qs: {},
 							uri: `/v1/meetings/${meetingId}`,
+							body: {},
+							json: true,
+							useQuerystring: true,
+						} as IRequestOptions;
+
+						responseData = await this.helpers.requestWithAuthentication.call(
+							this,
+							'meetGeekApi',
+							options,
+						);
+					}
+
+					if (operation === 'getMeeting') {
+						const meetingId = this.getNodeParameter('meetingId', i) as string;
+
+						const options = {
+							method: 'GET',
+							qs: {},
+							uri: `/v1/meetings/${meetingId}`,
+							body: {},
+							json: true,
+							useQuerystring: true,
+						} as IRequestOptions;
+
+						responseData = await this.helpers.requestWithAuthentication.call(
+							this,
+							'meetGeekApi',
+							options,
+						);
+					}
+
+					if (operation === 'getMeetings') {
+						const limit = this.getNodeParameter('limit', i) as number;
+						const offset = this.getNodeParameter('offset', i) as number;
+
+						const options = {
+							method: 'GET',
+							qs: {
+								limit,
+								offset,
+							},
+							uri: `/v1/meetings`,
 							body: {},
 							json: true,
 							useQuerystring: true,
@@ -260,6 +467,72 @@ export class MeetGeek implements INodeType {
 							method: 'GET',
 							qs: {},
 							uri: `/v1/meetings/${meetingId}/highlights`,
+							body: {},
+							json: true,
+							useQuerystring: true,
+						} as IRequestOptions;
+
+						responseData = await this.helpers.requestWithAuthentication.call(
+							this,
+							'meetGeekApi',
+							options,
+						);
+					}
+				}
+
+				if (resource === 'team') {
+					if (operation === 'getTeams') {
+						const limit = this.getNodeParameter('limit', i) as number;
+
+						const options = {
+							method: 'GET',
+							qs: {
+								limit,
+							},
+							uri: `/v1/teams`,
+							body: {},
+							json: true,
+							useQuerystring: true,
+						} as IRequestOptions;
+
+						responseData = await this.helpers.requestWithAuthentication.call(
+							this,
+							'meetGeekApi',
+							options,
+						);
+					}
+
+					if (operation === 'getTeamMeetings') {
+						const teamId = this.getNodeParameter('teamId', i) as string;
+						const limit = this.getNodeParameter('limit', i) as number;
+
+						const options = {
+							method: 'GET',
+							qs: {
+								limit,
+							},
+							uri: `/v1/teams/${teamId}/meetings`,
+							body: {},
+							json: true,
+							useQuerystring: true,
+						} as IRequestOptions;
+
+						responseData = await this.helpers.requestWithAuthentication.call(
+							this,
+							'meetGeekApi',
+							options,
+						);
+					}
+				}
+
+				if (resource === 'transcript') {
+					if (operation === 'getTranscripts') {
+						const meetingId = this.getNodeParameter('meetingId', i) as string;
+
+						const options = {
+							method: 'GET',
+							qs: {},
+							uri: `/v1/meetings/${meetingId}/transcripts`,
 							body: {},
 							json: true,
 							useQuerystring: true,
