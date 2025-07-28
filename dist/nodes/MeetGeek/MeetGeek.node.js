@@ -590,10 +590,12 @@ class MeetGeek {
                 if (resource === 'team') {
                     if (operation === 'getMany') {
                         const returnAll = this.getNodeParameter('returnAll', i);
+                        const cursor = this.getNodeParameter('cursor', i);
+                        let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allTeams = [];
-                            let nextCursor = undefined;
+                            let nextCursor = cursor || undefined;
                             do {
                                 const qs = {};
                                 if (nextCursor) {
@@ -615,12 +617,14 @@ class MeetGeek {
                                 }
                                 nextCursor = (_c = pageData.pagination) === null || _c === void 0 ? void 0 : _c.next_cursor;
                             } while (nextCursor);
-                            responseData = allTeams;
+                            responseData = { teams: allTeams };
                         }
                         else {
                             // Single page request
-                            const limit = this.getNodeParameter('limit', i);
                             const qs = { limit };
+                            if (cursor) {
+                                qs.cursor = cursor;
+                            }
                             const options = {
                                 method: 'GET',
                                 qs,
@@ -631,14 +635,7 @@ class MeetGeek {
                                 useQuerystring: true,
                             };
                             console.log('MeetGeek API Request - Get Many Teams:', JSON.stringify(options, null, 2));
-                            const pageData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
-                            // Return only the teams array, respecting the limit
-                            if (pageData.teams && Array.isArray(pageData.teams)) {
-                                responseData = pageData.teams.slice(0, limit);
-                            }
-                            else {
-                                responseData = [];
-                            }
+                            responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                         }
                     }
                     if (operation === 'get') {
@@ -660,7 +657,6 @@ class MeetGeek {
                     if (operation === 'getMany') {
                         const meetingId = this.getNodeParameter('meetingId', i);
                         const returnAll = this.getNodeParameter('returnAll', i);
-                        let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allTranscripts = [];
@@ -686,10 +682,11 @@ class MeetGeek {
                                 }
                                 nextCursor = (_d = pageData.pagination) === null || _d === void 0 ? void 0 : _d.next_cursor;
                             } while (nextCursor);
-                            responseData = { transcripts: allTranscripts };
+                            responseData = allTranscripts;
                         }
                         else {
                             // Single page request
+                            const limit = this.getNodeParameter('limit', i);
                             const qs = { limit };
                             const options = {
                                 method: 'GET',
@@ -701,7 +698,14 @@ class MeetGeek {
                                 useQuerystring: true,
                             };
                             console.log('MeetGeek API Request - Get Many Transcripts:', JSON.stringify(options, null, 2));
-                            responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
+                            const pageData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
+                            // Return only the transcripts array, respecting the limit
+                            if (pageData.transcripts && Array.isArray(pageData.transcripts)) {
+                                responseData = pageData.transcripts.slice(0, limit);
+                            }
+                            else {
+                                responseData = [];
+                            }
                         }
                     }
                     if (operation === 'get') {
