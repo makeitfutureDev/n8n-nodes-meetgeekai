@@ -559,12 +559,17 @@ export class MeetGeek implements INodeType {
 				}
 			} catch (error) {
 				if (this.continueOnFail()) {
-					const errorMessage = error instanceof Error ? error.message : String(error);
-					returnData.push({ json: { error: errorMessage } });
+					returnData.push({ error: error.message, json: {} });
 					continue;
 				}
 				throw error;
 			}
+
+			const executionData = this.helpers.constructExecutionMetaData(
+				this.helpers.returnJsonArray(responseData as IDataObject[]),
+				{ itemData: { item: i } },
+			);
+			returnData.push(...executionData);
 		}
 
 		return [returnData];
