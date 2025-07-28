@@ -492,7 +492,10 @@ class MeetGeek {
             }
             catch (error) {
                 if (this.continueOnFail()) {
-                    returnData.push({ error: error.message, json: {} });
+                    returnData.push({
+                        error: error,
+                        json: {}
+                    });
                     continue;
                 }
                 throw error;

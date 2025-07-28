@@ -6,6 +6,7 @@ import {
 	NodeConnectionType,
 	IDataObject,
 	IRequestOptions,
+	NodeApiError,
 } from 'n8n-workflow';
 
 export class MeetGeek implements INodeType {
@@ -559,7 +560,10 @@ export class MeetGeek implements INodeType {
 				}
 			} catch (error) {
 				if (this.continueOnFail()) {
-					returnData.push({ error: error.message, json: {} });
+					returnData.push({ 
+						error: error as NodeApiError, 
+						json: {} 
+					});
 					continue;
 				}
 				throw error;
