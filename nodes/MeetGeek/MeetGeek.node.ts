@@ -498,7 +498,7 @@ export class MeetGeek implements INodeType {
 							let nextCursor = cursor || undefined;
 							
 							do {
-								const qs: any = { limit: 100 }; // Use max limit for efficiency
+								const qs: any = {};
 								if (nextCursor) {
 									qs.cursor = nextCursor;
 								}
@@ -631,7 +631,7 @@ export class MeetGeek implements INodeType {
 							let nextCursor = cursor || undefined;
 							
 							do {
-								const qs: any = { limit: 100 }; // Use max limit for efficiency
+								const qs: any = {};
 								if (nextCursor) {
 									qs.cursor = nextCursor;
 								}
@@ -701,7 +701,7 @@ export class MeetGeek implements INodeType {
 							let nextCursor = cursor || undefined;
 							
 							do {
-								const qs: any = { limit: 100 }; // Use max limit for efficiency
+								const qs: any = {};
 								if (nextCursor) {
 									qs.cursor = nextCursor;
 								}

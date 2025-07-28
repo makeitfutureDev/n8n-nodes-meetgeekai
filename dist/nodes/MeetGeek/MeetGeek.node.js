@@ -472,7 +472,7 @@ class MeetGeek {
                             let allMeetings = [];
                             let nextCursor = cursor || undefined;
                             do {
-                                const qs = { limit: 100 }; // Use max limit for efficiency
+                                const qs = {};
                                 if (nextCursor) {
                                     qs.cursor = nextCursor;
                                 }
@@ -566,7 +566,7 @@ class MeetGeek {
                             let allTeams = [];
                             let nextCursor = cursor || undefined;
                             do {
-                                const qs = { limit: 100 }; // Use max limit for efficiency
+                                const qs = {};
                                 if (nextCursor) {
                                     qs.cursor = nextCursor;
                                 }
@@ -617,7 +617,7 @@ class MeetGeek {
                             let allMeetings = [];
                             let nextCursor = cursor || undefined;
                             do {
-                                const qs = { limit: 100 }; // Use max limit for efficiency
+                                const qs = {};
                                 if (nextCursor) {
                                     qs.cursor = nextCursor;
                                 }
