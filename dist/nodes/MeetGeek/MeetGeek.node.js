@@ -527,11 +527,12 @@ class MeetGeek {
                     if (operation === 'getMany') {
                         const meetingId = this.getNodeParameter('meetingId', i);
                         const returnAll = this.getNodeParameter('returnAll', i);
+                        const cursor = this.getNodeParameter('cursor', i);
                         let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allHighlights = [];
-                            let nextCursor = undefined;
+                            let nextCursor = cursor || undefined;
                             do {
                                 const qs = {};
                                 if (nextCursor) {
@@ -592,12 +593,11 @@ class MeetGeek {
                 if (resource === 'team') {
                     if (operation === 'getMany') {
                         const returnAll = this.getNodeParameter('returnAll', i);
-                        const cursor = this.getNodeParameter('cursor', i);
                         let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allTeams = [];
-                            let nextCursor = cursor || undefined;
+                            let nextCursor = undefined;
                             do {
                                 const qs = {};
                                 if (nextCursor) {
