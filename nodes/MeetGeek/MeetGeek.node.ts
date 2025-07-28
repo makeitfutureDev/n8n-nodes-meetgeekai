@@ -506,9 +506,6 @@ export class MeetGeek implements INodeType {
 						} else {
 							// Single page request
 							const qs: any = { limit };
-							if (cursor) {
-								qs.cursor = cursor;
-							}
 
 							const options = {
 								method: 'GET',
