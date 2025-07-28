@@ -22,14 +22,6 @@ class MeetGeek {
                     required: true,
                 },
             ],
-            webhooks: [
-                {
-                    name: 'default',
-                    httpMethod: 'POST',
-                    responseMode: 'onReceived',
-                    path: 'webhook',
-                },
-            ],
             properties: [
                 {
                     displayName: 'Resource',
@@ -109,12 +101,6 @@ class MeetGeek {
                             description: 'Get highlights for a meeting',
                             action: 'Get highlights',
                         },
-                        {
-                            name: 'Listen for New',
-                            value: 'webhook',
-                            description: 'Triggers when a new highlight is created',
-                            action: 'Listen for new highlights',
-                        },
                     ],
                     default: 'get',
                 },
@@ -188,21 +174,6 @@ class MeetGeek {
                     default: '',
                     required: true,
                     description: 'The ID of the meeting to retrieve highlights for',
-                },
-                // Webhook Fields
-                {
-                    displayName: 'Flow Name',
-                    name: 'flowName',
-                    type: 'string',
-                    displayOptions: {
-                        show: {
-                            resource: ['highlight'],
-                            operation: ['webhook'],
-                        },
-                    },
-                    default: '',
-                    required: true,
-                    description: 'Name for this webhook flow',
                 },
             ],
         };
@@ -291,43 +262,6 @@ class MeetGeek {
             }
         }
         return [returnData];
-    }
-    async webhook() {
-        const credentials = await this.getCredentials('meetGeekApi');
-        const req = this.getRequestObject();
-        const resp = this.getResponseObject();
-        const operation = this.getNodeParameter('operation');
-        if (operation === 'webhook') {
-            // Handle webhook setup
-            if (req.method === 'GET') {
-                // This is likely a webhook verification request
-                return {
-                    workflowData: [
-                        [
-                            {
-                                json: {
-                                    message: 'Webhook endpoint ready',
-                                },
-                            },
-                        ],
-                    ],
-                };
-            }
-            // Handle incoming webhook data
-            const body = req.body;
-            return {
-                workflowData: [
-                    [
-                        {
-                            json: body,
-                        },
-                    ],
-                ],
-            };
-        }
-        return {
-            workflowData: [[]],
-        };
     }
 }
 exports.MeetGeek = MeetGeek;

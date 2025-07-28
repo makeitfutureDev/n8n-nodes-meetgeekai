@@ -3,12 +3,7 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	ILoadOptionsFunctions,
-	INodePropertyOptions,
 	NodeConnectionType,
-	NodeOperationError,
-	IWebhookFunctions,
-	IWebhookResponseData,
 	IDataObject,
 	IRequestOptions,
 } from 'n8n-workflow';
@@ -31,14 +26,6 @@ export class MeetGeek implements INodeType {
 			{
 				name: 'meetGeekApi',
 				required: true,
-			},
-		],
-		webhooks: [
-			{
-				name: 'default',
-				httpMethod: 'POST',
-				responseMode: 'onReceived',
-				path: 'webhook',
 			},
 		],
 		properties: [
@@ -120,12 +107,6 @@ export class MeetGeek implements INodeType {
 						description: 'Get highlights for a meeting',
 						action: 'Get highlights',
 					},
-					{
-						name: 'Listen for New',
-						value: 'webhook',
-						description: 'Triggers when a new highlight is created',
-						action: 'Listen for new highlights',
-					},
 				],
 				default: 'get',
 			},
@@ -199,21 +180,6 @@ export class MeetGeek implements INodeType {
 				default: '',
 				required: true,
 				description: 'The ID of the meeting to retrieve highlights for',
-			},
-			// Webhook Fields
-			{
-				displayName: 'Flow Name',
-				name: 'flowName',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['highlight'],
-						operation: ['webhook'],
-					},
-				},
-				default: '',
-				required: true,
-				description: 'Name for this webhook flow',
 			},
 		],
 	};
@@ -317,47 +283,5 @@ export class MeetGeek implements INodeType {
 		}
 
 		return [returnData];
-	}
-
-	async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
-		const credentials = await this.getCredentials('meetGeekApi');
-		const req = this.getRequestObject();
-		const resp = this.getResponseObject();
-		const operation = this.getNodeParameter('operation') as string;
-
-		if (operation === 'webhook') {
-			// Handle webhook setup
-			if (req.method === 'GET') {
-				// This is likely a webhook verification request
-				return {
-					workflowData: [
-						[
-							{
-								json: {
-									message: 'Webhook endpoint ready',
-								},
-							},
-						],
-					],
-				};
-			}
-
-			// Handle incoming webhook data
-			const body = req.body;
-			
-			return {
-				workflowData: [
-					[
-						{
-							json: body,
-						},
-					],
-				],
-			};
-		}
-
-		return {
-			workflowData: [[]],
-		};
 	}
 }
