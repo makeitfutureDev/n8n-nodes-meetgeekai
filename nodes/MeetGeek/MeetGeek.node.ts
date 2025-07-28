@@ -222,17 +222,44 @@ export class MeetGeek implements INodeType {
 				description: 'Maximum number of meetings to return',
 			},
 			{
-				displayName: 'Offset',
-				name: 'offset',
-				type: 'number',
+				displayName: 'Cursor',
+				name: 'cursor',
+				type: 'string',
 				displayOptions: {
 					show: {
 						resource: ['meeting'],
 						operation: ['getMeetings'],
 					},
 				},
-				default: 0,
-				description: 'Number of meetings to skip',
+				default: '',
+				description: 'Cursor for pagination. Leave empty for first page.',
+			},
+			{
+				displayName: 'Return All',
+				name: 'returnAll',
+				type: 'boolean',
+				displayOptions: {
+					show: {
+						resource: ['meeting'],
+						operation: ['getMeetings'],
+					},
+				},
+				default: false,
+				description: 'Whether to return all results by automatically paginating through all pages',
+			},
+			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				displayOptions: {
+					show: {
+						resource: ['meeting'],
+						operation: ['getMeetings'],
+						returnAll: [false],
+					},
+				},
+				default: 10,
+				description: 'Maximum number of meetings to return per page',
 			},
 			// Upload Recording Fields
 			{
@@ -304,6 +331,32 @@ export class MeetGeek implements INodeType {
 				default: 10,
 				description: 'Maximum number of teams to return',
 			},
+			{
+				displayName: 'Cursor',
+				name: 'cursor',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['team'],
+						operation: ['getTeams'],
+					},
+				},
+				default: '',
+				description: 'Cursor for pagination. Leave empty for first page.',
+			},
+			{
+				displayName: 'Return All',
+				name: 'returnAll',
+				type: 'boolean',
+				displayOptions: {
+					show: {
+						resource: ['team'],
+						operation: ['getTeams'],
+					},
+				},
+				default: false,
+				description: 'Whether to return all results by automatically paginating through all pages',
+			},
 			// Get Team Meetings Fields
 			{
 				displayName: 'Team ID',
@@ -331,6 +384,32 @@ export class MeetGeek implements INodeType {
 				},
 				default: 10,
 				description: 'Maximum number of meetings to return',
+			},
+			{
+				displayName: 'Cursor',
+				name: 'cursor',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['team'],
+						operation: ['getTeamMeetings'],
+					},
+				},
+				default: '',
+				description: 'Cursor for pagination. Leave empty for first page.',
+			},
+			{
+				displayName: 'Return All',
+				name: 'returnAll',
+				type: 'boolean',
+				displayOptions: {
+					show: {
+						resource: ['team'],
+						operation: ['getTeamMeetings'],
+					},
+				},
+				default: false,
+				description: 'Whether to return all results by automatically paginating through all pages',
 			},
 			// Get Transcripts Fields
 			{
@@ -409,29 +488,72 @@ export class MeetGeek implements INodeType {
 					}
 
 					if (operation === 'getMeetings') {
-						const limit = this.getNodeParameter('limit', i) as number;
-						const offset = this.getNodeParameter('offset', i) as number;
+						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
+						const cursor = this.getNodeParameter('cursor', i) as string;
+						let limit = this.getNodeParameter('limit', i) as number;
 
-						const options = {
-							method: 'GET',
-							qs: {
-								limit,
-								offset,
-							},
-							baseURL: baseURL,
-							uri: `/v1/meetings`,
-							body: {},
-							json: true,
-							useQuerystring: true,
-						} as IRequestOptions;
+						if (returnAll) {
+							// Get all results by paginating
+							let allMeetings: any[] = [];
+							let nextCursor = cursor || undefined;
+							
+							do {
+								const qs: any = { limit: 100 }; // Use max limit for efficiency
+								if (nextCursor) {
+									qs.cursor = nextCursor;
+								}
 
-						console.log('MeetGeek API Request - Get Meetings:', JSON.stringify(options, null, 2));
+								const options = {
+									method: 'GET',
+									qs,
+									baseURL: baseURL,
+									uri: `/v1/meetings`,
+									body: {},
+									json: true,
+									useQuerystring: true,
+								} as IRequestOptions;
 
-						responseData = await this.helpers.requestWithAuthentication.call(
-							this,
-							'meetGeekApi',
-							options,
-						);
+								console.log('MeetGeek API Request - Get Meetings (Paginated):', JSON.stringify(options, null, 2));
+
+								const pageData = await this.helpers.requestWithAuthentication.call(
+									this,
+									'meetGeekApi',
+									options,
+								);
+
+								if (pageData.meetings && Array.isArray(pageData.meetings)) {
+									allMeetings = allMeetings.concat(pageData.meetings);
+								}
+
+								nextCursor = pageData.pagination?.next_cursor;
+							} while (nextCursor);
+
+							responseData = { meetings: allMeetings };
+						} else {
+							// Single page request
+							const qs: any = { limit };
+							if (cursor) {
+								qs.cursor = cursor;
+							}
+
+							const options = {
+								method: 'GET',
+								qs,
+								baseURL: baseURL,
+								uri: `/v1/meetings`,
+								body: {},
+								json: true,
+								useQuerystring: true,
+							} as IRequestOptions;
+
+							console.log('MeetGeek API Request - Get Meetings:', JSON.stringify(options, null, 2));
+
+							responseData = await this.helpers.requestWithAuthentication.call(
+								this,
+								'meetGeekApi',
+								options,
+							);
+						}
 					}
 				}
 
@@ -499,52 +621,142 @@ export class MeetGeek implements INodeType {
 
 				if (resource === 'team') {
 					if (operation === 'getTeams') {
-						const limit = this.getNodeParameter('limit', i) as number;
+						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
+						const cursor = this.getNodeParameter('cursor', i) as string;
+						let limit = this.getNodeParameter('limit', i) as number;
 
-						const options = {
-							method: 'GET',
-							qs: {
-								limit,
-							},
-							baseURL: baseURL,
-							uri: `/v1/teams`,
-							body: {},
-							json: true,
-							useQuerystring: true,
-						} as IRequestOptions;
-						console.log('MeetGeek API Request - Get Teams:', JSON.stringify(options, null, 2));
+						if (returnAll) {
+							// Get all results by paginating
+							let allTeams: any[] = [];
+							let nextCursor = cursor || undefined;
+							
+							do {
+								const qs: any = { limit: 100 }; // Use max limit for efficiency
+								if (nextCursor) {
+									qs.cursor = nextCursor;
+								}
 
+								const options = {
+									method: 'GET',
+									qs,
+									baseURL: baseURL,
+									uri: `/v1/teams`,
+									body: {},
+									json: true,
+									useQuerystring: true,
+								} as IRequestOptions;
 
-						responseData = await this.helpers.requestWithAuthentication.call(
-							this,
-							'meetGeekApi',
-							options,
-						);
+								console.log('MeetGeek API Request - Get Teams (Paginated):', JSON.stringify(options, null, 2));
+
+								const pageData = await this.helpers.requestWithAuthentication.call(
+									this,
+									'meetGeekApi',
+									options,
+								);
+
+								if (pageData.teams && Array.isArray(pageData.teams)) {
+									allTeams = allTeams.concat(pageData.teams);
+								}
+
+								nextCursor = pageData.pagination?.next_cursor;
+							} while (nextCursor);
+
+							responseData = { teams: allTeams };
+						} else {
+							// Single page request
+							const qs: any = { limit };
+							if (cursor) {
+								qs.cursor = cursor;
+							}
+
+							const options = {
+								method: 'GET',
+								qs,
+								baseURL: baseURL,
+								uri: `/v1/teams`,
+								body: {},
+								json: true,
+								useQuerystring: true,
+							} as IRequestOptions;
+
+							console.log('MeetGeek API Request - Get Teams:', JSON.stringify(options, null, 2));
+
+							responseData = await this.helpers.requestWithAuthentication.call(
+								this,
+								'meetGeekApi',
+								options,
+							);
+						}
 					}
 
 					if (operation === 'getTeamMeetings') {
 						const teamId = this.getNodeParameter('teamId', i) as string;
-						const limit = this.getNodeParameter('limit', i) as number;
+						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
+						const cursor = this.getNodeParameter('cursor', i) as string;
+						let limit = this.getNodeParameter('limit', i) as number;
 
-						const options = {
-							method: 'GET',
-							qs: {
-								limit,
-							},
-							baseURL: baseURL,
-							uri: `/v1/teams/${teamId}/meetings`,
-							body: {},
-							json: true,
-							useQuerystring: true,
-						} as IRequestOptions;
-						console.log('MeetGeek API Request - Get Team Meetings:', JSON.stringify(options, null, 2));
+						if (returnAll) {
+							// Get all results by paginating
+							let allMeetings: any[] = [];
+							let nextCursor = cursor || undefined;
+							
+							do {
+								const qs: any = { limit: 100 }; // Use max limit for efficiency
+								if (nextCursor) {
+									qs.cursor = nextCursor;
+								}
 
+								const options = {
+									method: 'GET',
+									qs,
+									baseURL: baseURL,
+									uri: `/v1/teams/${teamId}/meetings`,
+									body: {},
+									json: true,
+									useQuerystring: true,
+								} as IRequestOptions;
 
-						responseData = await this.helpers.requestWithAuthentication.call(
-							this,
-							'meetGeekApi',
-							options,
-						);
+								console.log('MeetGeek API Request - Get Team Meetings (Paginated):', JSON.stringify(options, null, 2));
+
+								const pageData = await this.helpers.requestWithAuthentication.call(
+									this,
+									'meetGeekApi',
+									options,
+								);
+
+								if (pageData.meetings && Array.isArray(pageData.meetings)) {
+									allMeetings = allMeetings.concat(pageData.meetings);
+								}
+
+								nextCursor = pageData.pagination?.next_cursor;
+							} while (nextCursor);
+
+							responseData = { meetings: allMeetings };
+						} else {
+							// Single page request
+							const qs: any = { limit };
+							if (cursor) {
+								qs.cursor = cursor;
+							}
+
+							const options = {
+								method: 'GET',
+								qs,
+								baseURL: baseURL,
+								uri: `/v1/teams/${teamId}/meetings`,
+								body: {},
+								json: true,
+								useQuerystring: true,
+							} as IRequestOptions;
+
+							console.log('MeetGeek API Request - Get Team Meetings:', JSON.stringify(options, null, 2));
+
+							responseData = await this.helpers.requestWithAuthentication.call(
+								this,
+								'meetGeekApi',
+								options,
+							);
+						}
 					}
 				}
 
