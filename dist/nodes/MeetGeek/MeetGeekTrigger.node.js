@@ -137,6 +137,8 @@ class MeetGeekTrigger {
                             json: true,
                             useQuerystring: true,
                         };
+                        console.log('MeetGeek Webhook - Delete:', JSON.stringify(options, null, 2));
+                        console.log('MeetGeek Webhook - Create:', JSON.stringify(options, null, 2));
                         try {
                             await this.helpers.request(options);
                         }

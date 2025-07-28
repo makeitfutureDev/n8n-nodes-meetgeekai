@@ -398,6 +398,8 @@ export class MeetGeek implements INodeType {
 							useQuerystring: true,
 						} as IRequestOptions;
 
+						console.log('MeetGeek API Request - Get Meeting Details:', JSON.stringify(options, null, 2));
+
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,
 							'meetGeekApi',
@@ -481,6 +483,8 @@ export class MeetGeek implements INodeType {
 							json: true,
 							useQuerystring: true,
 						} as IRequestOptions;
+						console.log('MeetGeek API Request - Get Highlights:', JSON.stringify(options, null, 2));
+
 
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,
@@ -505,6 +509,8 @@ export class MeetGeek implements INodeType {
 							json: true,
 							useQuerystring: true,
 						} as IRequestOptions;
+						console.log('MeetGeek API Request - Get Teams:', JSON.stringify(options, null, 2));
+
 
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,
@@ -528,6 +534,8 @@ export class MeetGeek implements INodeType {
 							json: true,
 							useQuerystring: true,
 						} as IRequestOptions;
+						console.log('MeetGeek API Request - Get Team Meetings:', JSON.stringify(options, null, 2));
+
 
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,
@@ -550,6 +558,10 @@ export class MeetGeek implements INodeType {
 							json: true,
 							useQuerystring: true,
 						} as IRequestOptions;
+						console.log('MeetGeek API Request - Get Transcripts:', JSON.stringify(options, null, 2));
+
+
+						console.log('MeetGeek API Request - Get Meeting:', JSON.stringify(options, null, 2));
 
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,
@@ -575,6 +587,10 @@ export class MeetGeek implements INodeType {
 			);
 			returnData.push(...executionData);
 		}
+						console.log('MeetGeek API Request - Get Meetings:', JSON.stringify(options, null, 2));
+
+
+						console.log('MeetGeek API Request - Upload Recording:', JSON.stringify(options, null, 2));
 
 		return [returnData];
 	}

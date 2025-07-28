@@ -155,6 +155,10 @@ export class MeetGeekTrigger implements INodeType {
 						useQuerystring: true,
 					} as IRequestOptions;
 
+					console.log('MeetGeek Webhook - Delete:', JSON.stringify(options, null, 2));
+
+					console.log('MeetGeek Webhook - Create:', JSON.stringify(options, null, 2));
+
 					try {
 						await this.helpers.request(options);
 					} catch (error) {

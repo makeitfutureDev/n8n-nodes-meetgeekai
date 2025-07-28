@@ -380,6 +380,7 @@ class MeetGeek {
                             json: true,
                             useQuerystring: true,
                         };
+                        console.log('MeetGeek API Request - Get Meeting Details:', JSON.stringify(options, null, 2));
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                     }
                     if (operation === 'getMeetings') {
@@ -438,6 +439,7 @@ class MeetGeek {
                             json: true,
                             useQuerystring: true,
                         };
+                        console.log('MeetGeek API Request - Get Highlights:', JSON.stringify(options, null, 2));
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                     }
                 }
@@ -455,6 +457,7 @@ class MeetGeek {
                             json: true,
                             useQuerystring: true,
                         };
+                        console.log('MeetGeek API Request - Get Teams:', JSON.stringify(options, null, 2));
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                     }
                     if (operation === 'getTeamMeetings') {
@@ -471,6 +474,7 @@ class MeetGeek {
                             json: true,
                             useQuerystring: true,
                         };
+                        console.log('MeetGeek API Request - Get Team Meetings:', JSON.stringify(options, null, 2));
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                     }
                 }
@@ -486,6 +490,8 @@ class MeetGeek {
                             json: true,
                             useQuerystring: true,
                         };
+                        console.log('MeetGeek API Request - Get Transcripts:', JSON.stringify(options, null, 2));
+                        console.log('MeetGeek API Request - Get Meeting:', JSON.stringify(options, null, 2));
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                     }
                 }
@@ -503,6 +509,8 @@ class MeetGeek {
             const executionData = this.helpers.constructExecutionMetaData(this.helpers.returnJsonArray(responseData), { itemData: { item: i } });
             returnData.push(...executionData);
         }
+        console.log('MeetGeek API Request - Get Meetings:', JSON.stringify(options, null, 2));
+        console.log('MeetGeek API Request - Upload Recording:', JSON.stringify(options, null, 2));
         return [returnData];
     }
 }
