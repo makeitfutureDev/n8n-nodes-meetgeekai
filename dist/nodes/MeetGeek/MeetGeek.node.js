@@ -181,26 +181,23 @@ class MeetGeek {
     async execute() {
         const items = this.getInputData();
         const returnData = [];
-        const credentials = await this.getCredentials('meetGeekApi');
         const resource = this.getNodeParameter('resource', 0);
         const operation = this.getNodeParameter('operation', 0);
+        let responseData;
         for (let i = 0; i < items.length; i++) {
             try {
                 if (resource === 'meeting') {
                     if (operation === 'getDetails') {
                         const meetingId = this.getNodeParameter('meetingId', i);
-                        const baseUrl = credentials.token.toString().startsWith('us-')
-                            ? 'https://api.meetgeek.ai'
-                            : 'https://api2.meetgeek.ai';
                         const options = {
                             method: 'GET',
                             qs: {},
-                            uri: `${baseUrl}/v1/meetings/${meetingId}`,
+                            uri: `/v1/meetings/${meetingId}`,
                             body: {},
                             json: true,
                             useQuerystring: true,
                         }, satisfies, IRequestOptions;
-                        const responseData = await this.helpers.request(options);
+                        responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                         returnData.push({ json: responseData });
                     }
                 }
@@ -209,9 +206,6 @@ class MeetGeek {
                         const downloadUrl = this.getNodeParameter('downloadUrl', i);
                         const template = this.getNodeParameter('template', i);
                         const languageCode = this.getNodeParameter('languageCode', i);
-                        const baseUrl = credentials.token.toString().startsWith('us-')
-                            ? 'https://api.meetgeek.ai'
-                            : 'https://api2.meetgeek.ai';
                         const body = {
                             download_url: downloadUrl,
                         };
@@ -224,30 +218,27 @@ class MeetGeek {
                         const options = {
                             method: 'POST',
                             qs: {},
-                            uri: `${baseUrl}/v1/upload`,
+                            uri: `/v1/upload`,
                             body,
                             json: true,
                             useQuerystring: true,
                         }, satisfies, IRequestOptions;
-                        const responseData = await this.helpers.request(options);
+                        responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                         returnData.push({ json: responseData });
                     }
                 }
                 if (resource === 'highlight') {
                     if (operation === 'get') {
                         const meetingId = this.getNodeParameter('meetingId', i);
-                        const baseUrl = credentials.token.toString().startsWith('us-')
-                            ? 'https://api.meetgeek.ai'
-                            : 'https://api2.meetgeek.ai';
                         const options = {
                             method: 'GET',
                             qs: {},
-                            uri: `${baseUrl}/v1/meetings/${meetingId}/highlights`,
+                            uri: `/v1/meetings/${meetingId}/highlights`,
                             body: {},
                             json: true,
                             useQuerystring: true,
                         }, satisfies, IRequestOptions;
-                        const responseData = await this.helpers.request(options);
+                        responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                         returnData.push({ json: responseData });
                     }
                 }
