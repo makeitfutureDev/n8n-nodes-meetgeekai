@@ -449,6 +449,7 @@ class MeetGeek {
                     }
                     if (operation === 'getMany') {
                         const returnAll = this.getNodeParameter('returnAll', i);
+                        let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allMeetings = [];
@@ -474,11 +475,10 @@ class MeetGeek {
                                 }
                                 nextCursor = (_a = pageData.pagination) === null || _a === void 0 ? void 0 : _a.next_cursor;
                             } while (nextCursor);
-                            responseData = allMeetings;
+                            responseData = { meetings: allMeetings };
                         }
                         else {
                             // Single page request
-                            const limit = this.getNodeParameter('limit', i);
                             const qs = { limit };
                             const options = {
                                 method: 'GET',
@@ -490,14 +490,7 @@ class MeetGeek {
                                 useQuerystring: true,
                             };
                             console.log('MeetGeek API Request - Get Many Meetings:', JSON.stringify(options, null, 2));
-                            const pageData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
-                            // Return only the meetings array, respecting the limit
-                            if (pageData.meetings && Array.isArray(pageData.meetings)) {
-                                responseData = pageData.meetings.slice(0, limit);
-                            }
-                            else {
-                                responseData = [];
-                            }
+                            responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                         }
                     }
                 }
@@ -532,7 +525,6 @@ class MeetGeek {
                         const meetingId = this.getNodeParameter('meetingId', i);
                         const returnAll = this.getNodeParameter('returnAll', i);
                         const cursor = this.getNodeParameter('cursor', i);
-                        let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allHighlights = [];
@@ -558,14 +550,12 @@ class MeetGeek {
                                 }
                                 nextCursor = (_b = pageData.pagination) === null || _b === void 0 ? void 0 : _b.next_cursor;
                             } while (nextCursor);
-                            responseData = { highlights: allHighlights };
+                            responseData = allHighlights;
                         }
                         else {
                             // Single page request
+                            const limit = this.getNodeParameter('limit', i);
                             const qs = { limit };
-                            if (cursor) {
-                                qs.cursor = cursor;
-                            }
                             const options = {
                                 method: 'GET',
                                 qs,
@@ -576,7 +566,14 @@ class MeetGeek {
                                 useQuerystring: true,
                             };
                             console.log('MeetGeek API Request - Get Many Highlights:', JSON.stringify(options, null, 2));
-                            responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
+                            const pageData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
+                            // Return only the highlights array, respecting the limit
+                            if (pageData.highlights && Array.isArray(pageData.highlights)) {
+                                responseData = pageData.highlights.slice(0, limit);
+                            }
+                            else {
+                                responseData = [];
+                            }
                         }
                     }
                     if (operation === 'get') {
