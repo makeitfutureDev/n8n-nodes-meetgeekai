@@ -198,7 +198,6 @@ class MeetGeek {
                             useQuerystring: true,
                         }, satisfies, IRequestOptions;
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
-                        returnData.push({ json: responseData });
                     }
                 }
                 if (resource === 'recording') {
@@ -224,7 +223,6 @@ class MeetGeek {
                             useQuerystring: true,
                         }, satisfies, IRequestOptions;
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
-                        returnData.push({ json: responseData });
                     }
                 }
                 if (resource === 'highlight') {
@@ -239,7 +237,6 @@ class MeetGeek {
                             useQuerystring: true,
                         }, satisfies, IRequestOptions;
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
-                        returnData.push({ json: responseData });
                     }
                 }
             }
