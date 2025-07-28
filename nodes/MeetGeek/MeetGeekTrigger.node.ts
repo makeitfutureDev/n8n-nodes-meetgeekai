@@ -6,6 +6,7 @@ import type {
 	NodeConnectionType,
 	IWebhookResponseData,
 	IRequestOptions,
+}
 
 export class MeetGeekTrigger implements INodeType {
 	description: INodeTypeDescription = {
