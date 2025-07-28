@@ -399,6 +399,7 @@ export class MeetGeek implements INodeType {
 						} as IRequestOptions;
 
 						console.log('MeetGeek API Request - Get Meeting Details:', JSON.stringify(options, null, 2));
+            
 
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,
