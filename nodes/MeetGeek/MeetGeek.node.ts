@@ -464,13 +464,12 @@ export class MeetGeek implements INodeType {
 
 					if (operation === 'getMany') {
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-						const cursor = this.getNodeParameter('cursor', i) as string;
 						let limit = this.getNodeParameter('limit', i) as number;
 
 						if (returnAll) {
 							// Get all results by paginating
 							let allMeetings: any[] = [];
-							let nextCursor = cursor || undefined;
+							let nextCursor: string | undefined = undefined;
 							
 							do {
 								const qs: any = {};

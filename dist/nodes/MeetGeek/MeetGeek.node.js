@@ -449,12 +449,11 @@ class MeetGeek {
                     }
                     if (operation === 'getMany') {
                         const returnAll = this.getNodeParameter('returnAll', i);
-                        const cursor = this.getNodeParameter('cursor', i);
                         let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allMeetings = [];
-                            let nextCursor = cursor || undefined;
+                            let nextCursor = undefined;
                             do {
                                 const qs = {};
                                 if (nextCursor) {
