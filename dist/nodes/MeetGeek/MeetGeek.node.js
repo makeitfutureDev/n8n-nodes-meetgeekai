@@ -480,9 +480,6 @@ class MeetGeek {
                         else {
                             // Single page request
                             const qs = { limit };
-                            if (cursor) {
-                                qs.cursor = cursor;
-                            }
                             const options = {
                                 method: 'GET',
                                 qs,
