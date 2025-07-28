@@ -25,7 +25,7 @@ export class MeetGeekApi implements ICredentialType {
 		type: 'generic',
 		properties: {
 			headers: {
-				'Authorization': 'Bearer {{$credentials.token}}',
+				'Authorization': '=Bearer {{$credentials.token}}',
 			},
 		},
 	};

@@ -425,6 +425,8 @@ export class MeetGeek implements INodeType {
 							useQuerystring: true,
 						} as IRequestOptions;
 
+						console.log('MeetGeek API Request - Get Meetings:', JSON.stringify(options, null, 2));
+
 						responseData = await this.helpers.requestWithAuthentication.call(
 							this,
 							'meetGeekApi',

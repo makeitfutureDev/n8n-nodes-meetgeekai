@@ -21,7 +21,7 @@ class MeetGeekApi {
             type: 'generic',
             properties: {
                 headers: {
-                    'Authorization': 'Bearer {{$credentials.token}}',
+                    'Authorization': '=Bearer {{$credentials.token}}',
                 },
             },
         };
