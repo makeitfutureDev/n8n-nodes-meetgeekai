@@ -449,11 +449,12 @@ class MeetGeek {
                     }
                     if (operation === 'getMany') {
                         const returnAll = this.getNodeParameter('returnAll', i);
+                        const cursor = this.getNodeParameter('cursor', i);
                         let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allMeetings = [];
-                            let nextCursor = undefined;
+                            let nextCursor = cursor || undefined;
                             do {
                                 const qs = {};
                                 if (nextCursor) {
@@ -480,6 +481,9 @@ class MeetGeek {
                         else {
                             // Single page request
                             const qs = { limit };
+                            if (cursor) {
+                                qs.cursor = cursor;
+                            }
                             const options = {
                                 method: 'GET',
                                 qs,
@@ -657,12 +661,11 @@ class MeetGeek {
                     if (operation === 'getMany') {
                         const meetingId = this.getNodeParameter('meetingId', i);
                         const returnAll = this.getNodeParameter('returnAll', i);
-                        const cursor = this.getNodeParameter('cursor', i);
                         let limit = this.getNodeParameter('limit', i);
                         if (returnAll) {
                             // Get all results by paginating
                             let allTranscripts = [];
-                            let nextCursor = cursor || undefined;
+                            let nextCursor = undefined;
                             do {
                                 const qs = {};
                                 if (nextCursor) {
@@ -689,9 +692,6 @@ class MeetGeek {
                         else {
                             // Single page request
                             const qs = { limit };
-                            if (cursor) {
-                                qs.cursor = cursor;
-                            }
                             const options = {
                                 method: 'GET',
                                 qs,
