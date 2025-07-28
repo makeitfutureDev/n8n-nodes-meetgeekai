@@ -14,21 +14,21 @@ class MeetGeekApi {
                 typeOptions: { password: true },
                 default: '',
                 required: true,
-                description: 'Go to the Integration Tab screen from Settings to find your Token',
+                description: 'Generate your API key by going to Integrations -> Public API Card',
             },
         ];
         this.authenticate = {
             type: 'generic',
             properties: {
                 headers: {
-                    'ZAPIER-TOKEN': '={{$credentials.token}}',
+                    'Authorization': 'Bearer {{$credentials.token}}',
                 },
             },
         };
         this.test = {
             request: {
-                baseURL: '={{$credentials.token.startsWith("us-") ? "https://app.meetgeek.ai" : "https://app2.meetgeek.ai"}}',
-                url: '/integrations/zapier/connect',
+                baseURL: 'https://api.meetgeek.ai',
+                url: '/v1/meetings',
                 method: 'GET',
             },
         };
