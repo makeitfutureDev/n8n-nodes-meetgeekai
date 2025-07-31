@@ -9,14 +9,14 @@
     "transcription"
   ],
   "license": "MIT",
-  "homepage": "https://meetgeek.ai",
+  "homepage": "",
   "author": {
-    "name": "MeetGeek",
-    "email": "support@meetgeek.ai"
+    "name": "Alex Nemes",
+    "email": "anemes@makeitfuture.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/meetgeek/n8n-nodes-meetgeek.git"
+    "url": ""
   },
   "main": "index.js",
   "scripts": {
