@@ -28,7 +28,7 @@ This node uses the MeetGeek API credentials. You'll need to:
 
 1. Go to your MeetGeek settings
 2. Navigate to the Integration Tab
-3. Copy your API token
+3. Copy your API token from Public API
 4. Create new credentials in n8n using this token
 
 ## Compatibility
