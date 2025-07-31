@@ -9,6 +9,12 @@ import {
 	NodeApiError,
 } from 'n8n-workflow';
 
+import { highlightFields, highlightOperations } from './descriptions/HighlightDescription';				
+import { meetingFields, meetingOperations } from './descriptions/MeetingDescription';
+import { recordingFields, recordingOperations } from './descriptions/RecordingDescription';
+import { teamFields, teamOperations } from './descriptions/TeamDescription';
+import { transcriptFields, transcriptOperations } from './descriptions/TranscriptDescription';
+
 export class MeetGeek implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'MeetGeek',
@@ -58,372 +64,24 @@ export class MeetGeek implements INodeType {
 					},
 				],
 				default: 'meeting',
-			},
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: {
-					show: {
-						resource: ['meeting'],
-					},
-				},
-				options: [
-					{
-						name: 'Get Many',
-						value: 'getMany',
-						description: 'Get list of meetings',
-						action: 'Get many meetings',
-					},
-					{
-						name: 'Get',
-						value: 'get',
-						description: 'Get a meeting by ID',
-						action: 'Get meeting',
-					},
-				],
-				default: 'getMany',
-			},
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: {
-					show: {
-						resource: ['recording'],
-					},
-				},
-				options: [
-					{
-						name: 'Upload',
-						value: 'upload',
-						description: 'Upload a recording for analysis',
-						action: 'Upload recording',
-					},
-				],
-				default: 'upload',
-			},
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: {
-					show: {
-						resource: ['highlight'],
-					},
-				},
-				options: [
-					{
-						name: 'Get Many',
-						value: 'getMany',
-						description: 'Get list of highlights for a meeting',
-						action: 'Get many highlights',
-					},
-					{
-						name: 'Get',
-						value: 'get',
-						description: 'Get a highlight by ID',
-						action: 'Get highlight',
-					},
-				],
-				default: 'getMany',
-			},
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: {
-					show: {
-						resource: ['team'],
-					},
-				},
-				options: [
-					{
-						name: 'Get Many',
-						value: 'getMany',
-						description: 'Get list of teams',
-						action: 'Get many teams',
-					},
-					{
-						name: 'Get',
-						value: 'get',
-						description: 'Get a team by ID',
-						action: 'Get team',
-					},
-				],
-				default: 'getMany',
-			},
-			{
-				displayName: 'Operation',
-				name: 'operation',
-				type: 'options',
-				noDataExpression: true,
-				displayOptions: {
-					show: {
-						resource: ['transcript'],
-					},
-				},
-				options: [
-					{
-						name: 'Get Many',
-						value: 'getMany',
-						description: 'Get list of transcripts for a meeting',
-						action: 'Get many transcripts',
-					},
-					{
-						name: 'Get',
-						value: 'get',
-						description: 'Get a transcript by ID',
-						action: 'Get transcript',
-					},
-				],
-				default: 'getMany',
-			},
-			// Meeting Get Fields
-			{
-				displayName: 'Meeting ID',
-				name: 'meetingId',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['meeting'],
-						operation: ['get'],
-					},
-				},
-				default: '',
-				required: true,
-				description: 'The ID of the meeting to retrieve',
-			},
-			// Meeting Get Many Fields
-			{
-				displayName: 'Return All',
-				name: 'returnAll',
-				type: 'boolean',
-				displayOptions: {
-					show: {
-						resource: ['meeting'],
-						operation: ['getMany'],
-					},
-				},
-				default: false,
-				description: 'Whether to return all results by automatically paginating through all pages',
-			},
-			{
-				displayName: 'Limit',
-				name: 'limit',
-				type: 'number',
-				displayOptions: {
-					show: {
-						resource: ['meeting'],
-						operation: ['getMany'],
-						returnAll: [false],
-					},
-				},
-				default: 10,
-				description: 'Maximum number of meetings to return per page',
-			},
-			// Upload Recording Fields
-			{
-				displayName: 'Download URL',
-				name: 'downloadUrl',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['recording'],
-						operation: ['upload'],
-					},
-				},
-				default: '',
-				required: true,
-				description: 'An accessible URL that initiates a direct download when accessed',
-			},
-			{
-				displayName: 'Template',
-				name: 'template',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['recording'],
-						operation: ['upload'],
-					},
-				},
-				default: '',
-				description: 'Meeting template to use. If left blank, MeetGeek will automatically select based on account settings',
-			},
-			{
-				displayName: 'Language Code',
-				name: 'languageCode',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['recording'],
-						operation: ['upload'],
-					},
-				},
-				default: '',
-				description: 'Language code for the recording. If left blank, MeetGeek will auto-detect',
-			},
-			// Highlight Get Many Fields
-			{
-				displayName: 'Meeting ID',
-				name: 'meetingId',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['highlight'],
-						operation: ['getMany'],
-					},
-				},
-				default: '',
-				required: true,
-				description: 'The ID of the meeting to get highlights for',
-			},
-			{
-				displayName: 'Return All',
-				name: 'returnAll',
-				type: 'boolean',
-				displayOptions: {
-					show: {
-						resource: ['highlight'],
-						operation: ['getMany'],
-					},
-				},
-				default: false,
-				description: 'Whether to return all results by automatically paginating through all pages',
-			},
-			{
-				displayName: 'Limit',
-				name: 'limit',
-				type: 'number',
-				displayOptions: {
-					show: {
-						resource: ['highlight'],
-						operation: ['getMany'],
-						returnAll: [false],
-					},
-				},
-				default: 10,
-				description: 'Maximum number of highlights to return per page',
-			},
-			// Highlight Get Fields
-			{
-				displayName: 'Highlight ID',
-				name: 'highlightId',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['highlight'],
-						operation: ['get'],
-					},
-				},
-				default: '',
-				required: true,
-				description: 'The ID of the highlight to retrieve',
-			},
-			// Team Get Many Fields
-			{
-				displayName: 'Return All',
-				name: 'returnAll',
-				type: 'boolean',
-				displayOptions: {
-					show: {
-						resource: ['team'],
-						operation: ['getMany'],
-					},
-				},
-				default: false,
-				description: 'Whether to return all results by automatically paginating through all pages',
-			},
-			{
-				displayName: 'Limit',
-				name: 'limit',
-				type: 'number',
-				displayOptions: {
-					show: {
-						resource: ['team'],
-						operation: ['getMany'],
-						returnAll: [false],
-					},
-				},
-				default: 10,
-				description: 'Maximum number of teams to return per page',
-			},
-			// Team Get Fields
-			{
-				displayName: 'Team ID',
-				name: 'teamId',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['team'],
-						operation: ['get'],
-					},
-				},
-				default: '',
-				required: true,
-				description: 'The ID of the team to retrieve',
-			},
-			// Transcript Get Many Fields
-			{
-				displayName: 'Meeting ID',
-				name: 'meetingId',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['transcript'],
-						operation: ['getMany'],
-					},
-				},
-				default: '',
-				required: true,
-				description: 'The ID of the meeting to get transcripts for',
-			},
-			{
-				displayName: 'Return All',
-				name: 'returnAll',
-				type: 'boolean',
-				displayOptions: {
-					show: {
-						resource: ['transcript'],
-						operation: ['getMany'],
-					},
-				},
-				default: false,
-				description: 'Whether to return all results by automatically paginating through all pages',
-			},
-			{
-				displayName: 'Limit',
-				name: 'limit',
-				type: 'number',
-				displayOptions: {
-					show: {
-						resource: ['transcript'],
-						operation: ['getMany'],
-						returnAll: [false],
-					},
-				},
-				default: 10,
-				description: 'Maximum number of transcripts to return per page',
-			},
-			// Transcript Get Fields
-			{
-				displayName: 'Transcript ID',
-				name: 'transcriptId',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['transcript'],
-						operation: ['get'],
-					},
-				},
-				default: '',
-				required: true,
-				description: 'The ID of the transcript to retrieve',
-			},
+			},	
+			
+			// HIGHLIGHT
+			...highlightOperations,
+			...highlightFields,
+			// MEETING
+			...meetingOperations,
+			...meetingFields,
+			// RECORDING
+			...recordingOperations,
+			...recordingFields,
+			// TEAM
+			...teamOperations,
+			...teamFields,	
+			// TRANSCRIPT
+			...transcriptOperations,
+			...transcriptFields
+			
 		],
 	};
 
@@ -441,7 +99,7 @@ export class MeetGeek implements INodeType {
 		for (let i = 0; i < items.length; i++) {
 			try {
 				if (resource === 'meeting') {
-					if (operation === 'get') {
+					if (operation === 'getMeeting') {
 						const meetingId = this.getNodeParameter('meetingId', i) as string;
 
 
@@ -462,50 +120,22 @@ export class MeetGeek implements INodeType {
 						);
 					}
 
-					if (operation === 'getMany') {
+					if (operation === 'getManyMeetings') {
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-						let limit = this.getNodeParameter('limit', i) as number;
+						const limit = returnAll ? 0 : (this.getNodeParameter('limit', i) as number);
 
-						if (returnAll) {
-							// Get all results by paginating
-							let allMeetings: any[] = [];
-							let nextCursor: string | undefined = undefined;
-							
-							do {
-								const qs: any = {};
-								if (nextCursor) {
-									qs.cursor = nextCursor;
-								}
-
-								const options = {
-									method: 'GET',
-									qs,
-									baseURL: baseURL,
-									uri: `/v1/meetings`,
-									body: {},
-									json: true,
-									useQuerystring: true,
-								} as IRequestOptions;
-
-								console.log('MeetGeek API Request - Get Many Meetings (Paginated):', JSON.stringify(options, null, 2));
-
-								const pageData = await this.helpers.requestWithAuthentication.call(
-									this,
-									'meetGeekApi',
-									options,
-								);
-
-								if (pageData.meetings && Array.isArray(pageData.meetings)) {
-									allMeetings = allMeetings.concat(pageData.meetings);
-								}
-
-								nextCursor = pageData.pagination?.next_cursor;
-							} while (nextCursor);
-
-							responseData = { meetings: allMeetings };
-						} else {
-							// Single page request
-							const qs: any = { limit };
+						// Always perform paginated requests
+						let allMeetings: any[] = [];
+						let nextCursor: string | undefined = undefined;
+						
+						do {
+							const qs: any = {};
+							if (nextCursor) {
+								qs.cursor = nextCursor;
+							}
+							if (!returnAll && limit > 0) {
+								qs.limit = limit;
+							}
 
 							const options = {
 								method: 'GET',
@@ -517,19 +147,34 @@ export class MeetGeek implements INodeType {
 								useQuerystring: true,
 							} as IRequestOptions;
 
-							console.log('MeetGeek API Request - Get Many Meetings:', JSON.stringify(options, null, 2));
+							console.log('MeetGeek API Request - Get Many Meetings (Paginated):', JSON.stringify(options, null, 2));
 
-							responseData = await this.helpers.requestWithAuthentication.call(
+							const pageData = await this.helpers.requestWithAuthentication.call(
 								this,
 								'meetGeekApi',
 								options,
 							);
-						}
+
+							if (pageData.meetings && Array.isArray(pageData.meetings)) {
+								allMeetings = allMeetings.concat(pageData.meetings);
+							}
+
+							nextCursor = pageData.pagination?.next_cursor;
+							
+							// If not returnAll, stop when we reach the limit
+							if (!returnAll && allMeetings.length >= limit) {
+								break;
+							}
+						} while (nextCursor);
+
+						// If not returnAll, slice to the requested limit
+						const meetings = returnAll ? allMeetings : allMeetings.slice(0, limit);
+						responseData = { meetings };
 					}
 				}
 
 				if (resource === 'recording') {
-					if (operation === 'upload') {
+					if (operation === 'uploadRecording') {
 						const downloadUrl = this.getNodeParameter('downloadUrl', i) as string;
 						const template = this.getNodeParameter('template', i) as string;
 						const languageCode = this.getNodeParameter('languageCode', i) as string;
@@ -566,55 +211,23 @@ export class MeetGeek implements INodeType {
 				}
 
 				if (resource === 'highlight') {
-					if (operation === 'getMany') {
+					if (operation === 'getManyHighlights') {
 						const meetingId = this.getNodeParameter('meetingId', i) as string;
 
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-						const cursor = this.getNodeParameter('cursor', i) as string;
-						let limit = this.getNodeParameter('limit', i) as number;
+						const limit = returnAll ? 0 : (this.getNodeParameter('limit', i) as number);
 
-						if (returnAll) {
-							// Get all results by paginating
-							let allHighlights: any[] = [];
-							let nextCursor = cursor || undefined;
-							
-							do {
-								const qs: any = {};
-								if (nextCursor) {
-									qs.cursor = nextCursor;
-								}
-
-								const options = {
-									method: 'GET',
-									qs,
-									baseURL: baseURL,
-									uri: `/v1/meetings/${meetingId}/highlights`,
-									body: {},
-									json: true,
-									useQuerystring: true,
-								} as IRequestOptions;
-
-								console.log('MeetGeek API Request - Get Many Highlights (Paginated):', JSON.stringify(options, null, 2));
-
-								const pageData = await this.helpers.requestWithAuthentication.call(
-									this,
-									'meetGeekApi',
-									options,
-								);
-
-								if (pageData.highlights && Array.isArray(pageData.highlights)) {
-									allHighlights = allHighlights.concat(pageData.highlights);
-								}
-
-								nextCursor = pageData.pagination?.next_cursor;
-							} while (nextCursor);
-
-							responseData = { highlights: allHighlights };
-						} else {
-							// Single page request
-							const qs: any = { limit };
-							if (cursor) {
-								qs.cursor = cursor;
+						// Always perform paginated requests
+						let allHighlights: any[] = [];
+						let nextCursor: string | undefined = undefined;
+						
+						do {
+							const qs: any = {};
+							if (nextCursor) {
+								qs.cursor = nextCursor;
+							}
+							if (!returnAll && limit > 0) {
+								qs.limit = limit;
 							}
 
 							const options = {
@@ -627,17 +240,32 @@ export class MeetGeek implements INodeType {
 								useQuerystring: true,
 							} as IRequestOptions;
 
-							console.log('MeetGeek API Request - Get Many Highlights:', JSON.stringify(options, null, 2));
+							console.log('MeetGeek API Request - Get Many Highlights (Paginated):', JSON.stringify(options, null, 2));
 
-							responseData = await this.helpers.requestWithAuthentication.call(
+							const pageData = await this.helpers.requestWithAuthentication.call(
 								this,
 								'meetGeekApi',
 								options,
 							);
-						}
+
+							if (pageData.highlights && Array.isArray(pageData.highlights)) {
+								allHighlights = allHighlights.concat(pageData.highlights);
+							}
+
+							nextCursor = pageData.pagination?.next_cursor;
+							
+							// If not returnAll, stop when we reach the limit
+							if (!returnAll && allHighlights.length >= limit) {
+								break;
+							}
+						} while (nextCursor);
+
+						// If not returnAll, slice to the requested limit
+						const highlights = returnAll ? allHighlights : allHighlights.slice(0, limit);
+						responseData = { highlights };
 					}
 
-					if (operation === 'get') {
+					if (operation === 'getHighlight') {
 						const highlightId = this.getNodeParameter('highlightId', i) as string;
 
 						const options = {
@@ -661,76 +289,36 @@ export class MeetGeek implements INodeType {
 				}
 
 				if (resource === 'team') {
-					if (operation === 'getMany') {
-						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
-						const cursor = this.getNodeParameter('cursor', i) as string;
-						let limit = this.getNodeParameter('limit', i) as number;
+					if (operation === 'getManyTeams') {
+						const limit = this.getNodeParameter('limit', i) as number;
 
-						if (returnAll) {
-							// Get all results by paginating
-							let allTeams: any[] = [];
-							let nextCursor = cursor || undefined;
-							
-							do {
-								const qs: any = {};
-								if (nextCursor) {
-									qs.cursor = nextCursor;
-								}
-
-								const options = {
-									method: 'GET',
-									qs,
-									baseURL: baseURL,
-									uri: `/v1/teams`,
-									body: {},
-									json: true,
-									useQuerystring: true,
-								} as IRequestOptions;
-
-								console.log('MeetGeek API Request - Get Many Teams (Paginated):', JSON.stringify(options, null, 2));
-
-								const pageData = await this.helpers.requestWithAuthentication.call(
-									this,
-									'meetGeekApi',
-									options,
-								);
-
-								if (pageData.teams && Array.isArray(pageData.teams)) {
-									allTeams = allTeams.concat(pageData.teams);
-								}
-
-								nextCursor = pageData.pagination?.next_cursor;
-							} while (nextCursor);
-
-							responseData = { teams: allTeams };
-						} else {
-							// Single page request
-							const qs: any = { limit };
-							if (cursor) {
-								qs.cursor = cursor;
-							}
-
-							const options = {
-								method: 'GET',
-								qs,
-								baseURL: baseURL,
-								uri: `/v1/teams`,
-								body: {},
-								json: true,
-								useQuerystring: true,
-							} as IRequestOptions;
-
-							console.log('MeetGeek API Request - Get Many Teams:', JSON.stringify(options, null, 2));
-
-							responseData = await this.helpers.requestWithAuthentication.call(
-								this,
-								'meetGeekApi',
-								options,
-							);
+						const qs: any = {};
+						if (limit > 0) {
+							qs.limit = limit;
 						}
+
+						const options = {
+							method: 'GET',
+							qs,
+							baseURL: baseURL,
+							uri: `/v1/teams`,
+							body: {},
+							json: true,
+							useQuerystring: true,
+						} as IRequestOptions;
+
+						console.log('MeetGeek API Request - Get Many Teams:', JSON.stringify(options, null, 2));
+
+						responseData = await this.helpers.requestWithAuthentication.call(
+							this,
+							'meetGeekApi',
+							options,
+						);
+
+						console.log(responseData)
 					}
 
-					if (operation === 'get') {
+					if (operation === 'getTeam') {
 						const teamId = this.getNodeParameter('teamId', i) as string;
 
 						const options = {
@@ -753,65 +341,36 @@ export class MeetGeek implements INodeType {
 					}
 				}
 
-				if (resource === 'transcript') {
-					if (operation === 'getMany') {
+				if (resource === 'transcript') {		
+				if (operation === 'getManyTranscripts') {
 						const meetingId = this.getNodeParameter('meetingId', i) as string;
-
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
 
-						if (returnAll) {
-							// Get all results by paginating
-							let allTranscripts: any[] = [];
-							let nextCursor: string | undefined = undefined;
-							
-							do {
-								const qs: any = {};
-								if (nextCursor) {
-									qs.cursor = nextCursor;
-								}
-
-								const options = {
-									method: 'GET',
-									qs,
-									baseURL: baseURL,
-									uri: `/v1/meetings/${meetingId}/transcripts`,
-									body: {},
-									json: true,
-									useQuerystring: true,
-								} as IRequestOptions;
-
-								console.log('MeetGeek API Request - Get Many Transcripts (Paginated):', JSON.stringify(options, null, 2));
-
-								const pageData = await this.helpers.requestWithAuthentication.call(
-									this,
-									'meetGeekApi',
-									options,
-								);
-
-								if (pageData.transcripts && Array.isArray(pageData.transcripts)) {
-									allTranscripts = allTranscripts.concat(pageData.transcripts);
-								}
-
-								nextCursor = pageData.pagination?.next_cursor;
-							} while (nextCursor);
-
-							responseData = allTranscripts;
-						} else {
-							// Single page request
-							const limit = this.getNodeParameter('limit', i) as number;
-							const qs: any = { limit };
+						// Always perform paginated requests
+						const limit = returnAll ? 0 : (this.getNodeParameter('limit', i) as number);
+						let allSentences: any[] = [];
+						let nextCursor: string | undefined = undefined;
+						
+						do {
+							const qs: any = {};
+							if (nextCursor) {
+								qs.cursor = nextCursor;
+							}
+							if (!returnAll && limit > 0) {
+								qs.limit = limit;
+							}
 
 							const options = {
 								method: 'GET',
 								qs,
 								baseURL: baseURL,
-								uri: `/v1/meetings/${meetingId}/transcripts`,
+								uri: `/v1/meetings/${meetingId}/transcript`,
 								body: {},
 								json: true,
 								useQuerystring: true,
 							} as IRequestOptions;
 
-							console.log('MeetGeek API Request - Get Many Transcripts:', JSON.stringify(options, null, 2));
+							console.log('MeetGeek API Request - Get Many Transcripts (Paginated):', JSON.stringify(options, null, 2));
 
 							const pageData = await this.helpers.requestWithAuthentication.call(
 								this,
@@ -819,38 +378,19 @@ export class MeetGeek implements INodeType {
 								options,
 							);
 
-							// Return only the transcripts array, respecting the limit
-							if (pageData.transcripts && Array.isArray(pageData.transcripts)) {
-								responseData = pageData.transcripts.slice(0, limit);
-							} else {
-								responseData = [];
+							if (pageData.sentences && Array.isArray(pageData.sentences)) {
+								allSentences = allSentences.concat(pageData.sentences);
 							}
-						}
+
+							nextCursor = pageData.pagination?.next_cursor;
+							
+						} while (nextCursor && (returnAll || allSentences.length < limit));
+
+						// If not returnAll, slice to the requested limit
+						responseData = returnAll ? allSentences : allSentences.slice(0, limit);
 					}
 
-					if (operation === 'get') {
-						const transcriptId = this.getNodeParameter('transcriptId', i) as string;
-
-						const options = {
-							method: 'GET',
-							qs: {},
-							baseURL: baseURL,
-							uri: `/v1/transcripts/${transcriptId}`,
-							body: {},
-							json: true,
-							useQuerystring: true,
-						} as IRequestOptions;
-
-						console.log('MeetGeek API Request - Get Transcript:', JSON.stringify(options, null, 2));
-
-						console.log('MeetGeek API Request - Get Meeting:', JSON.stringify(options, null, 2));
-
-						responseData = await this.helpers.requestWithAuthentication.call(
-							this,
-							'meetGeekApi',
-							options,
-						);
-					}
+			
 				}
 			} catch (error) {
 				if (this.continueOnFail()) {
