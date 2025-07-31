@@ -17,13 +17,19 @@ exports.meetingOperations = [
                 name: 'Get Many',
                 value: 'getManyMeetings',
                 description: 'Get list of meetings',
-                action: 'Get many meetings',
+                action: 'Gets many meetings',
             },
             {
-                name: 'Get',
+                name: 'Get Meeting details',
                 value: 'getMeeting',
                 description: 'Get a meeting by ID',
-                action: 'Get meeting',
+                action: 'Gets a meeting by ID',
+            },
+            {
+                name: 'Get Meeting summary',
+                value: 'getMeetingSummary',
+                description: 'Get meeting summary by ID',
+                action: 'Gets meeting summary by ID',
             },
         ],
         default: 'getManyMeetings',
@@ -37,7 +43,7 @@ exports.meetingFields = [
         displayOptions: {
             show: {
                 resource: ['meeting'],
-                operation: ['getMeeting'],
+                operation: ['getMeeting', 'getMeetingSummary'],
             },
         },
         default: '',

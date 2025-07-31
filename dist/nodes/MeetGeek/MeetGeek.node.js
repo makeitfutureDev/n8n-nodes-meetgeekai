@@ -102,6 +102,19 @@ class MeetGeek {
                         };
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                     }
+                    if (operation === 'getMeetingSummary') {
+                        const meetingId = this.getNodeParameter('meetingId', i);
+                        const options = {
+                            method: 'GET',
+                            qs: {},
+                            baseURL: baseURL,
+                            uri: `/v1/meetings/${meetingId}/summary`,
+                            body: {},
+                            json: true,
+                            useQuerystring: true,
+                        };
+                        responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
+                    }
                     if (operation === 'getManyMeetings') {
                         const returnAll = this.getNodeParameter('returnAll', i);
                         const limit = returnAll ? 0 : this.getNodeParameter('limit', i);

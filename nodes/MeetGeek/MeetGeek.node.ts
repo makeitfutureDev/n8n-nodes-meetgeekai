@@ -120,6 +120,27 @@ export class MeetGeek implements INodeType {
 						);
 					}
 
+					if (operation === 'getMeetingSummary') {
+						const meetingId = this.getNodeParameter('meetingId', i) as string;
+
+
+						const options = {
+							method: 'GET',
+							qs: {},
+							baseURL: baseURL,
+							uri: `/v1/meetings/${meetingId}/summary`,
+							body: {},
+							json: true,
+							useQuerystring: true,
+						} as IRequestOptions;
+
+						responseData = await this.helpers.requestWithAuthentication.call(
+							this,
+							'meetGeekApi',
+							options,
+						);
+					}
+
 					if (operation === 'getManyMeetings') {
 						const returnAll = this.getNodeParameter('returnAll', i) as boolean;
 						const limit = returnAll ? 0 : (this.getNodeParameter('limit', i) as number);
@@ -265,27 +286,6 @@ export class MeetGeek implements INodeType {
 						responseData = { highlights };
 					}
 
-					if (operation === 'getHighlight') {
-						const highlightId = this.getNodeParameter('highlightId', i) as string;
-
-						const options = {
-							method: 'GET',
-							qs: {},
-							baseURL: baseURL,
-							uri: `/v1/highlights/${highlightId}`,
-							body: {},
-							json: true,
-							useQuerystring: true,
-						} as IRequestOptions;
-
-						console.log('MeetGeek API Request - Get Highlight:', JSON.stringify(options, null, 2));
-
-						responseData = await this.helpers.requestWithAuthentication.call(
-							this,
-							'meetGeekApi',
-							options,
-						);
-					}
 				}
 
 				if (resource === 'team') {
@@ -318,14 +318,14 @@ export class MeetGeek implements INodeType {
 						console.log(responseData)
 					}
 
-					if (operation === 'getTeam') {
+					if (operation === 'getTeamMeetings') {
 						const teamId = this.getNodeParameter('teamId', i) as string;
 
 						const options = {
 							method: 'GET',
 							qs: {},
 							baseURL: baseURL,
-							uri: `/v1/teams/${teamId}`,
+							uri: `/v1/teams/${teamId}/meetings`,
 							body: {},
 							json: true,
 							useQuerystring: true,
