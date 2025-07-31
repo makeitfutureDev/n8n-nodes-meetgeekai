@@ -50,7 +50,7 @@ exports.recordingFields = [
             },
         },
         default: '',
-        description: 'Meeting template to use. If left blank, MeetGeek will automatically select based on account settings',
+        description: 'Please consult the [appendix](https://docs.meetgeek.ai/api-reference/v1/appendix-template-names) for all available meeting template options.',
     },
     {
         displayName: 'Language Code',
@@ -63,6 +63,6 @@ exports.recordingFields = [
             },
         },
         default: '',
-        description: 'Language code for the recording. If left blank, MeetGeek will auto-detect',
+        description: 'Please consult the [appendix](https://docs.meetgeek.ai/api-reference/v1/appendix-language-codes) for all available language code options.',
     },
 ];

@@ -20,10 +20,10 @@ exports.teamOperations = [
                 action: 'Get many teams',
             },
             {
-                name: 'Get',
-                value: 'getTeam',
-                description: 'Get a team by ID',
-                action: 'Get team',
+                name: 'Get Team Meetings',
+                value: 'getTeamMeetings',
+                description: 'Get team meetings',
+                action: 'Gets team meetings',
             },
         ],
         default: 'getManyTeams',
@@ -52,11 +52,11 @@ exports.teamFields = [
         displayOptions: {
             show: {
                 resource: ['team'],
-                operation: ['getTeam'],
+                operation: ['getTeamMeetings'],
             },
         },
         default: '',
         required: true,
-        description: 'The ID of the team to retrieve',
+        description: 'ID of the team(share/view access).',
     },
 ];

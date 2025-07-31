@@ -5,7 +5,7 @@ class MeetGeekApi {
     constructor() {
         this.name = 'meetGeekApi';
         this.displayName = 'MeetGeek API';
-        this.documentationUrl = 'https://docs.meetgeek.ai';
+        this.documentationUrl = 'https://docs.meetgeek.ai/getting-started/introduction';
         this.properties = [
             {
                 displayName: 'Token',

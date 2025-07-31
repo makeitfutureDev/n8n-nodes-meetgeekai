@@ -220,20 +220,6 @@ class MeetGeek {
                         const highlights = returnAll ? allHighlights : allHighlights.slice(0, limit);
                         responseData = { highlights };
                     }
-                    if (operation === 'getHighlight') {
-                        const highlightId = this.getNodeParameter('highlightId', i);
-                        const options = {
-                            method: 'GET',
-                            qs: {},
-                            baseURL: baseURL,
-                            uri: `/v1/highlights/${highlightId}`,
-                            body: {},
-                            json: true,
-                            useQuerystring: true,
-                        };
-                        console.log('MeetGeek API Request - Get Highlight:', JSON.stringify(options, null, 2));
-                        responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
-                    }
                 }
                 if (resource === 'team') {
                     if (operation === 'getManyTeams') {
@@ -255,13 +241,13 @@ class MeetGeek {
                         responseData = await this.helpers.requestWithAuthentication.call(this, 'meetGeekApi', options);
                         console.log(responseData);
                     }
-                    if (operation === 'getTeam') {
+                    if (operation === 'getTeamMeetings') {
                         const teamId = this.getNodeParameter('teamId', i);
                         const options = {
                             method: 'GET',
                             qs: {},
                             baseURL: baseURL,
-                            uri: `/v1/teams/${teamId}`,
+                            uri: `/v1/teams/${teamId}/meetings`,
                             body: {},
                             json: true,
                             useQuerystring: true,

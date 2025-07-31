@@ -8,7 +8,7 @@ import {
 export class MeetGeekApi implements ICredentialType {
 	name = 'meetGeekApi';
 	displayName = 'MeetGeek API';
-	documentationUrl = 'https://docs.meetgeek.ai';
+	documentationUrl = 'https://docs.meetgeek.ai/getting-started/introduction';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'Token',
