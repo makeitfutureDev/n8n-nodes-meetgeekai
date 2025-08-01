@@ -93,8 +93,7 @@ export class MeetGeekTrigger implements INodeType {
 			async create(this: IHookFunctions): Promise<boolean> {
 				const webhookData = this.getWorkflowStaticData('node');
 				const credentials = await this.getCredentials('meetGeekApi');
-				// const webhookUrl = this.getNodeWebhookUrl('default') as string;
-				const webhookUrl = "https://webhook.site/3d7629e1-c6b8-4ace-9f7f-4e77d33b5da6"
+			    const webhookUrl = this.getNodeWebhookUrl('default') as string;
 				const eventType = this.getNodeParameter('eventType') as string;
 				const name = this.getNodeParameter('name') as string;
 				const makeToken = this.getNodeParameter('makeToken') as string;
