@@ -12,7 +12,7 @@ export class MeetGeekTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'MeetGeek Trigger',
 		name: 'meetGeekTrigger',
-		icon: 'file:meetgeek.svg',
+		icon: 'file:meetgeekicon.svg',
 		group: ['trigger'],
 		version: 1,
 		description: 'Starts the workflow when MeetGeek events occur',
@@ -93,7 +93,8 @@ export class MeetGeekTrigger implements INodeType {
 			async create(this: IHookFunctions): Promise<boolean> {
 				const webhookData = this.getWorkflowStaticData('node');
 				const credentials = await this.getCredentials('meetGeekApi');
-				const webhookUrl = this.getNodeWebhookUrl('default') as string;
+				// const webhookUrl = this.getNodeWebhookUrl('default') as string;
+				const webhookUrl = "https://webhook.site/3d7629e1-c6b8-4ace-9f7f-4e77d33b5da6"
 				const eventType = this.getNodeParameter('eventType') as string;
 				const name = this.getNodeParameter('name') as string;
 				const makeToken = this.getNodeParameter('makeToken') as string;

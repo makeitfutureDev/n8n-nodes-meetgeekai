@@ -19,7 +19,7 @@ export class MeetGeek implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'MeetGeek',
 		name: 'meetGeek',
-		icon: 'file:meetgeek.svg',
+		icon: 'file:meetgeekicon.svg',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
