@@ -52,17 +52,7 @@ export class MeetGeekTrigger implements INodeType {
 						name: 'New Meeting',
 						value: 'MEETING_CREATED',
 						description: 'Triggers when a meeting is created',
-					},
-					{
-						name: 'Share Highlight',
-						value: 'HIGHLIGHT_SHARED',
-						description: 'Triggers when a highlight is shared',
-					},
-					{
-						name: 'Share Meeting',
-						value: 'MEETING_SHARED',
-						description: 'Triggers when a meeting is shared',
-					},
+					}
 				],
 				default: 'HIGHLIGHT_CREATED',
 			},
@@ -74,6 +64,17 @@ export class MeetGeekTrigger implements INodeType {
 				required: true,
 				description: 'Name for this webhook flow',
 			},
+			{
+				displayName: 'Make Token (Use this one until n8n integration card will be added)',
+				name: 'makeToken',
+				typeOptions: {
+					password: true,
+				},
+				type: 'string',
+				default: '',
+				required: true,
+				description: 'Generate your token by going to [Integrations](https://app.meetgeek.ai/integrations) -> Make API Card.',
+			},
 		],
 	};
 
@@ -81,10 +82,6 @@ export class MeetGeekTrigger implements INodeType {
 		default: {
 			async checkExists(this: IHookFunctions): Promise<boolean> {
 				const webhookData = this.getWorkflowStaticData('node');
-				const credentials = await this.getCredentials('meetGeekApi');
-				const webhookUrl = this.getNodeWebhookUrl('default') as string;
-				const eventType = this.getNodeParameter('eventType') as string;
-				const name = this.getNodeParameter('name') as string;
 
 				// Check if webhook already exists
 				if (webhookData.webhookId) {
@@ -99,10 +96,11 @@ export class MeetGeekTrigger implements INodeType {
 				const webhookUrl = this.getNodeWebhookUrl('default') as string;
 				const eventType = this.getNodeParameter('eventType') as string;
 				const name = this.getNodeParameter('name') as string;
+				const makeToken = this.getNodeParameter('makeToken') as string;
 
 				const baseUrl = credentials.token.toString().startsWith('us-')
-					? 'https://api-us.meetgeek.ai'
-					: 'https://api-eu.meetgeek.ai';
+					? 'https://us.meetgeek.ai'
+					: 'https://app.meetgeek.ai';
 
 				const body = {
 					hookUrl: webhookUrl,
@@ -110,17 +108,26 @@ export class MeetGeekTrigger implements INodeType {
 					name: name,
 				};
 
+				const headers = {
+					"MAKE-TOKEN": makeToken
+				};
+
 				const options = {
 					method: 'POST',
+					headers: headers,
 					qs: {},
-					uri: `${baseUrl}/integrations/zapier/subscribe`,
+					uri: `${baseUrl}/integrations/make/subscribe`,
 					body,
 					json: true,
 					useQuerystring: true,
 				} as IRequestOptions;
 
+				console.log('MeetGeek Webhook - Create:', JSON.stringify(options, null, 2));
+
 				try {
 					const responseData = await this.helpers.request(options);
+
+					console.log(responseData)
 
 					if (responseData.id === undefined) {
 						// Required data is missing so was not successful
@@ -136,11 +143,16 @@ export class MeetGeekTrigger implements INodeType {
 			async delete(this: IHookFunctions): Promise<boolean> {
 				const webhookData = this.getWorkflowStaticData('node');
 				const credentials = await this.getCredentials('meetGeekApi');
+				const makeToken = this.getNodeParameter('makeToken') as string;
+
+				const headers = {
+					"MAKE-TOKEN": makeToken
+				};
 
 				if (webhookData.webhookId !== undefined) {
 					const baseUrl = credentials.token.toString().startsWith('us-')
-						? 'https://api-us.meetgeek.ai'
-						: 'https://api-eu.meetgeek.ai';
+						? 'https://us.meetgeek.ai'
+						: 'https://app.meetgeek.ai';
 
 					const body = {
 						hookUrl_id: webhookData.webhookId,
@@ -148,8 +160,9 @@ export class MeetGeekTrigger implements INodeType {
 
 					const options = {
 						method: 'DELETE',
+						headers: headers,
 						qs: {},
-						uri: `${baseUrl}/integrations/zapier/unsubscribe`,
+						uri: `${baseUrl}/integrations/make/unsubscribe`,
 						body,
 						json: true,
 						useQuerystring: true,
@@ -157,10 +170,9 @@ export class MeetGeekTrigger implements INodeType {
 
 					console.log('MeetGeek Webhook - Delete:', JSON.stringify(options, null, 2));
 
-					console.log('MeetGeek Webhook - Create:', JSON.stringify(options, null, 2));
-
 					try {
-						await this.helpers.request(options);
+						const responseData = await this.helpers.request(options);
+						console.log(responseData);
 					} catch (error) {
 						return false;
 					}
